@@ -32,12 +32,11 @@ GOTO ARGS
 :: Builds the project
 :: -------------------------------------------------------------------
 :BUILD
+.nuget\NuGet.exe install ".nuget\packages.config" -o packages -source "https://nuget.org/api/v2/" -source "%LocalAppData%\NuGet\Cache"
 msbuild.exe %PROJECT% /nologo /t:%TARGET% /m:%NUMBER_OF_PROCESSORS% /p:GenerateDocumentation="%GENERATE_DOCUMENTATION%" /fl /flp:logfile=build.log;verbosity=%VERBOSITY%;encoding=UTF-8 /nr:False
 
 IF ERRORLEVEL 1 (
-    msbuild.exe build\Result.proj /t:Failure /nologo /noconlog /v:q
-) ELSE (
-    msbuild.exe build\Result.proj /t:Success /nologo /noconlog /v:q
+    COLOR 4E
 )
 GOTO END
 
@@ -79,7 +78,7 @@ GOTO BUILD
 
 :SetMSBuildToolsPathHelper
 SET MSBuildToolsPath=
-FOR /F "tokens=1,2*" %%i in ('REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\4.0 /V MSBuildToolsPath') DO (
+FOR /F "tokens=1,2*" %%i in ('REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\12.0 /V MSBuildToolsPath') DO (
     IF "%%i"=="MSBuildToolsPath" (
         SET "MSBuildToolsPath=%%k"
     )
