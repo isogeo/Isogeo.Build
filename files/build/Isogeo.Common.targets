@@ -781,7 +781,6 @@ It must be used with MSBuild 4.0.
       Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
       Prefix="ns"
       XPath="/ns:package/ns:metadata/ns:version"
-      XPath="/package/metadata/version"
       Value="$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)"
     />
   </Target>
