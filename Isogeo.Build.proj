@@ -1,0 +1,32 @@
+<Project
+  DefaultTargets="Rebuild"
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+  ToolsVersion="12.0"
+>
+
+  <PropertyGroup>
+    <ProjectName Condition="'$(ProjectName)'==''">$(MSBuildProjectName)</ProjectName>
+    <WindowsSdkVersion>v8.0A</WindowsSdkVersion>
+    <XUnitToolPath>$(MSBuildProjectDirectory)\packages\xunit.runners.1.9.1\tools\xunit.console.clr4.x86.exe</XUnitToolPath>
+  </PropertyGroup>
+
+
+  <!-- Projects -->
+  <ItemDefinitionGroup>
+    <Projects>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+      <Constants>TRACE%3BCONTRACTS_FULL</Constants>
+      <Properties>CodeContractsRuntimeCheckingLevel=Full;CodeContractsRuntimeThrowOnFailure=True;CodeContractsReferenceAssembly=Build;CodeContractsEmitXMLDocs=True</Properties>
+      <Library>true</Library>
+      <Packaged>true</Packaged>
+    </Projects>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Projects Include="Isogeo.Build.sln" />
+  </ItemGroup>
+
+  <!-- Import external targets -->
+  <Import Project="$(MSBuildProjectDirectory)\files\build\Isogeo.Common.targets" />
+</Project>
