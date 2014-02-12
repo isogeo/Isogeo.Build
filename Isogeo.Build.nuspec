@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Isogeo.Build</id>
-    <version>1.0</version>
+    <version>1.0.2.0</version>
     <title>Isogeo Build</title>
     <authors>mcartoixa</authors>
     <owners>Isogeo</owners>
