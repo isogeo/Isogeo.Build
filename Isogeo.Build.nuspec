@@ -4,9 +4,10 @@
     <id>Isogeo.Build</id>
     <version>1.0</version>
     <title>Isogeo Build</title>
-    <authors>Isogeo,mcartoixa</authors>
-    <owners>mcartoixa</owners>
+    <authors>mcartoixa</authors>
+    <owners>Isogeo</owners>
     <projectUrl>https://github.com/isogeo/Isogeo.Build</projectUrl>
+    <licenseUrl>https://github.com/isogeo/Isogeo.Build/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Scripts and tools required for Isogeo continuous integration.</description>
     <copyright>Copyright © 2014 Isogeo</copyright>
