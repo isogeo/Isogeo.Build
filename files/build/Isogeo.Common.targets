@@ -54,6 +54,7 @@ It must be used with MSBuild 4.0.
 
     <!-- Tools paths -->
     <BuildToolsPath Condition="'$(BuildToolsPath)'==''">$(MSBuildThisFileDirectory)</BuildToolsPath>
+    <InstallToolsPath Condition="'$(InstallToolsPath)'==''">$(MSBuildThisFileDirectory)\..\install\</InstallToolsPath>
     <NuGetToolPath Condition="'$(NuGetToolPath)'==''">$(InputPath)\.nuget\NuGet.exe</NuGetToolPath>
     <XUnitToolPath Condition="'$(XUnitToolPath)'==''">$(InputPath)\lib\xunit\xunit.console.clr4.x86.exe</XUnitToolPath>
     <MSDeployToolPath Condition="'$(MSDeployToolPath)'==''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3@InstallPath)msdeploy.exe</MSDeployToolPath>
@@ -675,9 +676,9 @@ It must be used with MSBuild 4.0.
     />
     <ItemGroup>
       <InstallFiles Include="$(InputPath)\install\$(PackageFileName)\**\*.*" />
-      <InstallFiles Include="$(InputPath)\build\7za.exe" />
-      <InstallFiles Include="$(InputPath)\build\Install.psm1" />
-      <InstallFiles Include="$(InputPath)\build\psake.psm1" />
+      <InstallFiles Include="$(BuildToolsPath)\7za.exe" />
+      <InstallFiles Include="$(InstallToolsPath)\Install.psm1" />
+      <InstallFiles Include="$(InstallToolsPath)\psake.psm1" />
     </ItemGroup>
     <Copy
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec') And !%(Projects.Library) And $(IsWebSite)"
