@@ -11,6 +11,8 @@
     <AppName Condition=" '$(AppName)'=='' ">.</AppName>
     <PathAdditions Condition=" '$(PathAdditions)'!='' ">$([MSBuild]::Unescape($(PathAdditions))</PathAdditions>
 
+    <InputPath Condition=" '$(InputPath)'=='' ">..\..\..\..</InputPath>
+
     <OutputPath Condition=" '$(OutDir)'!='' ">$(OutDir)$(AppName)</OutputPath>
     <OutputPath Condition=" '$(OutputPath)'=='' ">dist</OutputPath>
 
@@ -25,8 +27,8 @@
 
 
   <Target Name="InstallNpmPackages">
-    <NodePackageManager Action="Install" WorkingDirectory=".." />
-    <NodePackageManager Action="Dedupe" WorkingDirectory=".." />
+    <NodePackageManager Action="Install" WorkingDirectory="$(InputPath)" />
+    <NodePackageManager Action="Dedupe" WorkingDirectory="$(InputPath)" />
   </Target>
 
 
@@ -36,7 +38,7 @@
   <Target Name="CoreClean">
     <NodeJs
       Arguments="node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; clean"
-      WorkingDirectory=".."
+      WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
      />
   </Target>
@@ -59,7 +61,7 @@
 
     <NodeJs
       Arguments="node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; --reports=&quot;$(TmpOutputPath)&quot; $(BuildTargets)"
-      WorkingDirectory=".."
+      WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
      />
   </Target>

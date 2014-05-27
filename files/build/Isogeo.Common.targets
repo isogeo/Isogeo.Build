@@ -175,7 +175,7 @@ It must be used with MSBuild 4.0.
     <MSBuild
       Projects="$(_ProjectName)"
       RebaseOutputs="True"
-      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
+      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
       Targets="Clean"
       RunEachTargetSeparately="True"
     />
@@ -207,7 +207,7 @@ It must be used with MSBuild 4.0.
     <MSBuild
       Projects="$(_ProjectName)"
       RebaseOutputs="True"
-      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
+      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
       Targets="Build"
       RunEachTargetSeparately="True"
     >
@@ -240,7 +240,7 @@ It must be used with MSBuild 4.0.
       Condition="Exists('%(Projects.RelativeDir)%(Projects.Filename)$(UnitTestsSuffix)%(Projects.Extension)')"
       Projects="%(Projects.RelativeDir)%(Projects.Filename)$(UnitTestsSuffix)%(Projects.Extension)"
       RebaseOutputs="True"
-      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
+      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
       Targets="Build"
       RunEachTargetSeparately="True"
     />
