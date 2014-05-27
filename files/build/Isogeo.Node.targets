@@ -29,17 +29,17 @@
   <Target Name="InstallNpmPackages">
     <NodePackageManager Action="Install" WorkingDirectory="$(InputPath)" />
     <NodePackageManager Action="Dedupe" WorkingDirectory="$(InputPath)" />
-    <NodeJs
+    <!--<NodeJs
       Arguments="$(APPDATA)/npm/node_modules/npm-flatten/lib/index.js"
       WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
-     />
+     />-->
   </Target>
 
 
 
   <!-- Cleans the project -->
-  <Target Name="Clean" DependsOnTargets="InstallNpmPackages;BeforeClean;CoreClean;AfterClean" />
+  <Target Name="Clean" DependsOnTargets="BeforeClean;CoreClean;AfterClean" />
   <Target Name="CoreClean">
     <NodeJs
       Arguments="$(APPDATA)/npm/node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; clean"
@@ -56,7 +56,7 @@
   <!-- Builds the project -->
   <Target
     Name="Build"
-    DependsOnTargets="InstallNpmPackages;BeforeBuild;CoreBuild;AfterBuild"
+    DependsOnTargets="BeforeBuild;CoreBuild;AfterBuild"
   />
   <Target Name="CoreBuild">
     <PropertyGroup>

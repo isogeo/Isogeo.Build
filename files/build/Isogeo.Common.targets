@@ -147,6 +147,14 @@ It must be used with MSBuild 4.0.
       WorkingDirectory="$(InputPath)"
       YieldDuringToolExecution="True"
     />
+    <MSBuild
+      Condition="Exists('$(InputPath)\package.json')"
+      Projects="$(BuildToolsPath)Isogeo.Node.targets"
+      RebaseOutputs="True"
+      Properties="InputPath=$(InputPath)"
+      Targets="InstallNpmPackages"
+      RunEachTargetSeparately="True"
+    />
   </Target>
 
   <Target Name="PrepareOutput">
