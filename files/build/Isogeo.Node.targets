@@ -37,7 +37,7 @@
   <Target Name="Clean" DependsOnTargets="InstallNpmPackages;BeforeClean;CoreClean;AfterClean" />
   <Target Name="CoreClean">
     <NodeJs
-      Arguments="node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; clean"
+      Arguments="$(APPDATA)/npm/node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; clean"
       WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
      />
@@ -60,7 +60,7 @@
     </PropertyGroup>
 
     <NodeJs
-      Arguments="node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; --reports=&quot;$(TmpOutputPath)&quot; $(BuildTargets)"
+      Arguments="$(APPDATA)/npm/node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; $(BuildTargets)"
       WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
      />
