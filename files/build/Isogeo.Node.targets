@@ -28,11 +28,12 @@
 
   <Target Name="InstallNpmPackages">
     <NodePackageManager Action="Install" WorkingDirectory="$(InputPath)" />
-    <!--<NodePackageManager Action="Dedupe" WorkingDirectory="$(InputPath)" />-->
+    <NodePackageManager Action="Dedupe" WorkingDirectory="$(InputPath)" />
     <NodeJs
       Arguments="$(APPDATA)/npm/node_modules/npm-flatten/lib/index.js"
       WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
+      FailOnError="False"
      />
   </Target>
 

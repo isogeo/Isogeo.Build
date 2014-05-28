@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace Isogeo.Build.Tasks
         public NodeJs()
         {
             LogStandardErrorAsError=true;
+            FailOnError=true;
         }
 
         protected override string GenerateCommandLineCommands()
@@ -105,6 +107,25 @@ namespace Isogeo.Build.Tasks
             base.LogEventsFromTextOutput(singleLine, MessageImportance.Normal);
         }
 
+        protected override bool HandleTaskExecutionErrors()
+        {
+            if (!FailOnError)
+            {
+                Log.LogMessageFromText(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        SR.NodeJsToolFailed,
+                        ToolName,
+                        ExitCode
+                    ),
+                    MessageImportance.Normal
+                );
+                return true;
+            }
+
+            return base.HandleTaskExecutionErrors();
+        }
+
         protected override string GetWorkingDirectory()
         {
             if (WorkingDirectory!=null)
@@ -118,6 +139,8 @@ namespace Isogeo.Build.Tasks
             get;
             set;
         }
+
+        public bool FailOnError { get; set; }
 
         public ITaskItem WorkingDirectory
         {
