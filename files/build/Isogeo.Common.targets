@@ -632,8 +632,6 @@ It must be used with MSBuild 4.0.
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec')"
       SourceFiles="@(PackagedItems)"
       DestinationFiles="@(PackagedItems->'$(PackageTmpOutDir)$(PackageBaseName)\%(RecursiveDir)%(Filename)%(Extension)')"
-      OverwriteReadOnlyFiles="true"
-      SkipUnchangedFiles="true"
     />
     <ItemGroup>
       <PackageInputDirItem Condition="$(IsWebSite)" Include="$(PackageTmpOutDir)$(PackageBaseName)\*\Web.config" />
@@ -643,8 +641,6 @@ It must be used with MSBuild 4.0.
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec') And %(Projects.Library)"
       SourceFiles="@(PackagedItems)"
       DestinationFiles="@(PackagedItems->'$(TmpOutBinOutputPath)$(PackageBaseName)\%(RecursiveDir)%(Filename)%(Extension)')"
-      OverwriteReadOnlyFiles="true"
-      SkipUnchangedFiles="true"
     />
     <Zip
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec') And !%(Projects.Library)"
@@ -692,8 +688,6 @@ It must be used with MSBuild 4.0.
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec') And !%(Projects.Library) And $(IsWebSite)"
       SourceFiles="@(InstallFiles)"
       DestinationFiles="@(InstallFiles->'$(ProjectPackageTmpOutDir)%(RecursiveDir)%(Filename)%(Extension)')"
-      OverwriteReadOnlyFiles="true"
-      SkipUnchangedFiles="true"
     />
     <ItemGroup>
       <DeployPackagedItems Include="$(ProjectPackageTmpOutDir)**\*.*" />
@@ -710,8 +704,6 @@ It must be used with MSBuild 4.0.
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec')"
       SourceFiles="@(SymbolItems)"
       DestinationFiles="@(SymbolItems->'$(TmpOutPdbOutputPath)$(PackageBaseName)\%(RecursiveDir)%(Filename)%(Extension)')"
-      OverwriteReadOnlyFiles="true"
-      SkipUnchangedFiles="true"
     />
     <PropertyGroup>
       <SymbolsStorePath Condition="'$(SymbolsStorePath)'==''">$(TmpOutputPath)symbols\</SymbolsStorePath>
