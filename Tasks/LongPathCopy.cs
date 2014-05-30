@@ -40,7 +40,7 @@ namespace Isogeo.Build.Tasks
 
             for (int i=0; i<SourceFiles.Length;++i )
             {
-                var ddir=Path.Combine(DestinationFiles[i].GetMetadata("RootDir"), DestinationFiles[i].GetMetadata("Directory"));
+                var ddir=DestinationFiles[i].ItemSpec.Substring(0, DestinationFiles[i].ItemSpec.LastIndexOf(Path.DirectorySeparatorChar)+1);
                 if (!Exists(ddir) && !Create(ddir))
                 {
                     ret|=false;
