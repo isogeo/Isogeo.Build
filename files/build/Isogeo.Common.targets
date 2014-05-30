@@ -628,7 +628,7 @@ It must be used with MSBuild 4.0.
       <Output TaskParameter="ItemFound" ItemName="SymbolItems"/>
     </FindInList>
 
-    <Copy
+    <LongPathCopy
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec')"
       SourceFiles="@(PackagedItems)"
       DestinationFiles="@(PackagedItems->'$(PackageTmpOutDir)$(PackageBaseName)\%(RecursiveDir)%(Filename)%(Extension)')"
@@ -639,7 +639,7 @@ It must be used with MSBuild 4.0.
       <PackageInputDirItem Condition="$(IsWebSite)" Include="$(PackageTmpOutDir)$(PackageBaseName)\*\Web.config" />
     </ItemGroup>
 
-    <Copy
+    <LongPathCopy
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec') And %(Projects.Library)"
       SourceFiles="@(PackagedItems)"
       DestinationFiles="@(PackagedItems->'$(TmpOutBinOutputPath)$(PackageBaseName)\%(RecursiveDir)%(Filename)%(Extension)')"
@@ -688,7 +688,7 @@ It must be used with MSBuild 4.0.
       <InstallFiles Include="$(InstallToolsPath)\Install.psm1" />
       <InstallFiles Include="$(InstallToolsPath)\psake.psm1" />
     </ItemGroup>
-    <Copy
+    <LongPathCopy
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec') And !%(Projects.Library) And $(IsWebSite)"
       SourceFiles="@(InstallFiles)"
       DestinationFiles="@(InstallFiles->'$(ProjectPackageTmpOutDir)%(RecursiveDir)%(Filename)%(Extension)')"
@@ -706,7 +706,7 @@ It must be used with MSBuild 4.0.
       ZipLevel="9"
     />
 
-    <Copy
+    <LongPathCopy
       Condition="$(ProjectsPackaged) And !Exists('$(ProjectsFileName).nuspec')"
       SourceFiles="@(SymbolItems)"
       DestinationFiles="@(SymbolItems->'$(TmpOutPdbOutputPath)$(PackageBaseName)\%(RecursiveDir)%(Filename)%(Extension)')"

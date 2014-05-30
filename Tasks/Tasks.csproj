@@ -54,6 +54,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="LongPathCopy.cs" />
     <Compile Include="GetRelativePaths.cs" />
     <Compile Include="NodeJs.cs" />
     <Compile Include="FileInfo.cs" />
