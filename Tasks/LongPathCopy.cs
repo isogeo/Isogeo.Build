@@ -34,7 +34,7 @@ namespace Isogeo.Build.Tasks
                 for (int i=0; i<SourceFiles.Length; ++i)
                 {
                     DestinationFiles[i]=new TaskItem(Path.Combine(DestinationFolder.ItemSpec, Path.GetFileName(SourceFiles[i].ItemSpec)));
-                    SourceFiles[i].CopyMetadataTo(DestinationFiles[i]);
+                    //SourceFiles[i].CopyMetadataTo(DestinationFiles[i]);
                 }
             }
 
