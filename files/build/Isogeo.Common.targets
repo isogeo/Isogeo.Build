@@ -604,7 +604,7 @@ It must be used with MSBuild 4.0.
       <IsWebSite Condition="Exists('$(TmpBinOutputPath)$(ProjectsFileName)\$(ProjectsConfiguration)\$(ProjectsPlatform)\_PublishedWebsites')">True</IsWebSite>
       <PackageInputBaseDir>$(TmpBinOutputPath)$(ProjectsFileName)\$(ProjectsConfiguration)\$(ProjectsPlatform)\</PackageInputBaseDir>
       <PackageInputBaseDir Condition="$(IsWebSite)">$(TmpBinOutputPath)$(ProjectsFileName)\$(ProjectsConfiguration)\$(ProjectsPlatform)\_PublishedWebsites\</PackageInputBaseDir>
-      <IsWebSite Condition="$(IsWebSite) Or Exists('$(TmpBinOutputPath)$(ProjectsFileName)\$(ProjectsConfiguration)\$(ProjectsPlatform)\$(PackageFileName)\server.js')">True</IsWebSite>
+      <IsWebSite Condition="$(IsWebSite) Or Exists('$(TmpBinOutputPath)$(ProjectsFileName)\$(ProjectsConfiguration)\$(ProjectsPlatform)\$(PackageFileName)\Web.config')">True</IsWebSite>
       <PackageTmpOutDir>$(IntermediateOutputPath)pack\</PackageTmpOutDir>
       <ProjectPackageTmpOutDir>$(PackageTmpOutDir)$(ProjectsFileName)\$(ProjectsConfiguration)\$(ProjectsPlatform)\</ProjectPackageTmpOutDir>
     </PropertyGroup>
