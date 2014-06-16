@@ -61,7 +61,7 @@
   />
   <Target Name="CoreBuild">
     <PropertyGroup>
-      <BuildTargets Condition=" '$(Configuration)' != 'Debug' ">complete</BuildTargets>
+      <BuildTargets Condition=" '$(Configuration)' != 'Debug' ">release</BuildTargets>
       <BuildTargets Condition=" '$(BuildTargets)' == '' ">build</BuildTargets>
     </PropertyGroup>
 
