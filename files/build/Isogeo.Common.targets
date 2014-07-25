@@ -682,6 +682,7 @@ It must be used with MSBuild 4.0.
       <InstallFiles Include="$(InputPath)\install\$(PackageFileName)\**\*.*" />
       <InstallFiles Include="$(BuildToolsPath)\7za.exe" />
       <InstallFiles Include="$(InstallToolsPath)\Install.psm1" />
+      <InstallFiles Include="$(InstallToolsPath)\psake.ps1" />
       <InstallFiles Include="$(InstallToolsPath)\psake.psm1" />
     </ItemGroup>
     <LongPathCopy
