@@ -40,7 +40,7 @@ It must be used with MSBuild 4.0.
     <InputPath>$(MSBuildProjectDirectory)</InputPath>
     <RootPath Condition="'$(RootPath)'==''">$(MSBuildProjectDirectory)\..</RootPath>
 
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)'==''">11.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)'==''">12.0</VisualStudioVersion>
 
     <!-- Imported tasks paths -->
     <IsogeoMSBuildTasksPath Condition="'$(IsogeoMSBuildTasksPath)'==''">$(MSBuildThisFileDirectory)</IsogeoMSBuildTasksPath>
@@ -183,7 +183,7 @@ It must be used with MSBuild 4.0.
     <MSBuild
       Projects="$(_ProjectName)"
       RebaseOutputs="True"
-      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
+      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;BuildType=$(BuildType);%(Projects.Properties)"
       Targets="Clean"
       RunEachTargetSeparately="True"
     />
@@ -215,7 +215,7 @@ It must be used with MSBuild 4.0.
     <MSBuild
       Projects="$(_ProjectName)"
       RebaseOutputs="True"
-      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;%(Projects.Properties)"
+      Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;BuildType=$(BuildType);%(Projects.Properties)"
       Targets="Build"
       RunEachTargetSeparately="True"
     >

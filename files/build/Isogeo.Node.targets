@@ -5,9 +5,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 
-    <_Configuration>$(Configuration)</_Configuration>
-    <_Configuration Condition=" '$(_Configuration)' != 'Debug' And '$(_Configuration)' != 'Release' ">Release</_Configuration>
-
     <AppName Condition=" '$(AppName)'=='' ">.</AppName>
     <PathAdditions Condition=" '$(PathAdditions)'!='' ">$([MSBuild]::Unescape($(PathAdditions))</PathAdditions>
 
@@ -61,7 +58,7 @@
   />
   <Target Name="CoreBuild">
     <PropertyGroup>
-      <BuildTargets Condition=" '$(Configuration)' != 'Debug' ">release</BuildTargets>
+      <BuildTargets Condition=" '$(BuildType)' == 'Release' ">release</BuildTargets>
       <BuildTargets Condition=" '$(BuildTargets)' == '' ">build</BuildTargets>
     </PropertyGroup>
 
