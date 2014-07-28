@@ -58,7 +58,7 @@
   />
   <Target Name="CoreBuild">
     <PropertyGroup>
-      <BuildTargets Condition=" '$(BuildType)' == 'Release' ">release</BuildTargets>
+      <BuildTargets Condition=" '$(BuildType)' == 'Nightly' Or '$(BuildType)' == 'Release' ">release</BuildTargets>
       <BuildTargets Condition=" '$(BuildTargets)' == '' ">build</BuildTargets>
     </PropertyGroup>
 
