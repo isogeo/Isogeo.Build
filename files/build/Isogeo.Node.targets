@@ -62,6 +62,11 @@
       <BuildTargets Condition=" '$(BuildTargets)' == '' ">build</BuildTargets>
     </PropertyGroup>
 
+    <SetEnvironmentVariable
+      Condition="'$(RUBY_BIN)'!=''"
+      Variable="PATH"
+      Value="$(RUBY_BIN);$(PATH)"
+    />
     <NodeJs
       Arguments="$(APPDATA)/npm/node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; $(BuildTargets)"
       WorkingDirectory="$(InputPath)"
