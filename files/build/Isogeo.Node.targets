@@ -25,6 +25,12 @@
 
   <Target Name="InstallNpmPackages">
     <NodePackageManager Action="Install" WorkingDirectory="$(InputPath)" />
+
+    <Copy
+      SourceFiles="$(InputPath)\packages.json"
+      DestinationFiles="$(InputPath)\$(TmpOutputPath)\packages.json"
+      OverwriteReadOnlyFiles="true"
+    />
     <NodePackageManager Action="Dedupe" WorkingDirectory="$(InputPath)" FailOnError="False" />
     <NodeJs
       Arguments="$(APPDATA)/npm/node_modules/npm-flatten/lib/index.js"
@@ -32,6 +38,11 @@
       PathAdditions="$(PathAdditions)"
       FailOnError="False"
      />
+    <Copy
+      SourceFiles="$(InputPath)\$(TmpOutputPath)\packages.json"
+      DestinationFiles="$(InputPath)\packages.json"
+      OverwriteReadOnlyFiles="true"
+    />
   </Target>
 
 
