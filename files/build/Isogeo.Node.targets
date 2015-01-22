@@ -27,8 +27,9 @@
     <NodePackageManager Action="Install" WorkingDirectory="$(InputPath)" />
 
     <Copy
-      SourceFiles="$(InputPath)\packages.json"
-      DestinationFiles="$(InputPath)\$(TmpOutputPath)\packages.json"
+      Condition="Exists('$(InputPath)\package.json')"
+      SourceFiles="$(InputPath)\package.json"
+      DestinationFiles="$(InputPath)\$(TmpOutputPath)\package.json"
       OverwriteReadOnlyFiles="true"
     />
     <NodePackageManager Action="Dedupe" WorkingDirectory="$(InputPath)" FailOnError="False" />
@@ -39,8 +40,9 @@
       FailOnError="False"
      />
     <Copy
-      SourceFiles="$(InputPath)\$(TmpOutputPath)\packages.json"
-      DestinationFiles="$(InputPath)\packages.json"
+      Condition="Exists('$(InputPath)\$(TmpOutputPath)\package.json')"
+      SourceFiles="$(InputPath)\$(TmpOutputPath)\package.json"
+      DestinationFiles="$(InputPath)\package.json"
       OverwriteReadOnlyFiles="true"
     />
   </Target>
