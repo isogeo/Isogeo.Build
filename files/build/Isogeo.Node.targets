@@ -39,7 +39,7 @@
       PathAdditions="$(PathAdditions)"
       FailOnError="False"
      />
-    <Copy
+    <Move
       Condition="Exists('$(InputPath)\$(TmpOutputPath)\package.json')"
       SourceFiles="$(InputPath)\$(TmpOutputPath)\package.json"
       DestinationFiles="$(InputPath)\package.json"
