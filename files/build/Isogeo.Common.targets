@@ -719,7 +719,7 @@ It must be used with MSBuild 4.0.
       Recursive="True"
       Product="$(PackageFileName)"
       Version="$(VersionMajor).$(VersionMinor).$(AutoVersionBuild).$(AutoVersionRevision)"
-      ToolPath="$(SystemDrive)\Program Files (x86)\Windows Kits\8.0\Debuggers\x64"
+      ToolPath="$(SystemDrive)\Program Files (x86)\Windows Kits\8.1\Debuggers\x64"
     />
     <ItemGroup>
       <PackagedItems Remove="@(PackagedItems)" />
