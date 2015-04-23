@@ -45,6 +45,11 @@
       DestinationFiles="$(InputPath)\package.json"
       OverwriteReadOnlyFiles="true"
     />
+    <Delete
+      Condition="Exists('$(InputPath)\npm-shrinkwrap.json')"
+      Files="$(InputPath)\npm-shrinkwrap.json"
+      TreatErrorsAsWarning="True"
+    />
   </Target>
 
 
