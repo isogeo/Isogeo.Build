@@ -48,7 +48,7 @@
     <Delete
       Condition="Exists('$(InputPath)\npm-shrinkwrap.json')"
       Files="$(InputPath)\npm-shrinkwrap.json"
-      TreatErrorsAsWarning="True"
+      TreatErrorsAsWarnings="True"
     />
   </Target>
 
