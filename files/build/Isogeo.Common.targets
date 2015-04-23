@@ -813,7 +813,7 @@ It must be used with MSBuild 4.0.
     Condition="'$(BuildType)'=='Release' And '$(CCNetLabel)'!='' And Exists('$(InputPath)\.git\index') And '$(GitToolPath)'!=''"
   >
     <Exec
-      Command="&quot;$(GitToolPath)&quot; commit -a -m &quot;Update version number to $(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)&quot; --signoff"
+      Command="&quot;$(GitToolPath)&quot; commit -a -u -m &quot;Update version number to $(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)&quot; --signoff"
       WorkingDirectory="$(InputPath)"
       YieldDuringToolExecution="True"
     />
