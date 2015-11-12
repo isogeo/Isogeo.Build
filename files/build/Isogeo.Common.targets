@@ -101,7 +101,7 @@ It must be used with MSBuild 4.0.
 
   <!-- Prepares the build -->
   <PropertyGroup>
-    <PrepareDependsOn>BeforePrepare;PrepareToolPaths;PrepareEnvironment;PrepareDependencies;PrepareOutput;AfterPrepare</PrepareDependsOn>
+    <PrepareDependsOn>BeforePrepare;PrepareEnvironment;PrepareToolPaths;PrepareDependencies;PrepareOutput;AfterPrepare</PrepareDependsOn>
   </PropertyGroup>
   <Target Name="Prepare" DependsOnTargets="$(PrepareDependsOn)" />
 
@@ -128,6 +128,12 @@ It must be used with MSBuild 4.0.
     </XmlPeek>
     <PropertyGroup>
       <XUnitToolPath Condition="'$(XUnitToolVersion)'!=''">$(MSBuildProjectDirectory)\packages\xunit.runners.$(XUnitToolVersion)\tools\xunit.console.clr4.x86.exe</XUnitToolPath>
+      <XUnitToolPath Condition="!Exists('$(XUnitToolPath)')" />
+    </PropertyGroup>
+    <PropertyGroup>
+      <_DevEnvDir>$(DevEnvDir)</_DevEnvDir>
+      <_DevEnvDir Condition="'$(_DevEnvDir)'==''">$(VS120COMNTOOLS)..\IDE\</_DevEnvDir>
+      <MSTestToolPath Condition="Exists('$(_DevEnvDir)MSTest.exe')">$(_DevEnvDir)MSTest.exe</MSTestToolPath>
     </PropertyGroup>
   </Target>
 
@@ -147,13 +153,18 @@ It must be used with MSBuild 4.0.
       WorkingDirectory="$(InputPath)"
       YieldDuringToolExecution="True"
     />
-    <MSBuild
+    <!--<MSBuild
       Condition="Exists('$(InputPath)\package.json')"
       Projects="$(BuildToolsPath)Isogeo.Node.targets"
       RebaseOutputs="True"
       Properties="InputPath=$(InputPath)"
       Targets="InstallNpmPackages"
       RunEachTargetSeparately="True"
+    />-->
+    <Exec
+      Condition="Exists('$(InputPath)\package.json')"
+      Command="&quot;$([MSBuild]::GetRegistryValue('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\4.0', 'MSBuildToolsPath'))MSBuild.exe&quot; &quot;$(BuildToolsPath)Isogeo.Node.targets&quot; /nologo /t:InstallNpmPackages /p:InputPath=&quot;$(InputPath)&quot; /nr:False"
+      YieldDuringToolExecution="True"
     />
   </Target>
 
@@ -230,19 +241,17 @@ It must be used with MSBuild 4.0.
 
   <!-- Tests the projects -->
   <PropertyGroup>
-    <TestsDependsOn>Prepare;BeforeTests;InternalTests;AfterTests</TestsDependsOn>
+    <TestsDependsOn>Prepare;BeforeTests;InternalTestsBuild;InternalTestsXUnit;InternalTestsMSTest;AfterTests</TestsDependsOn>
   </PropertyGroup>
   <Target Name="Tests" DependsOnTargets="$(TestsDependsOn)" />
 
-  <Target Name="InternalTests"
+  <Target Name="InternalTestsBuild"
     Outputs="$(TestsOutputPath)%(Projects.Filename)\dummy.txt"
   >
     <!-- Build the tests -->
     <PropertyGroup>
-      <ProjectFilename>%(Projects.Filename)</ProjectFilename>
       <_OutDir>$(TestsOutputPath)%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_OutDir>
       <_IntermediateOutputPath>$(IntermediateOutputPath)bin\%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_IntermediateOutputPath>
-      <ProjectPartCoverExclude>%(Projects.PartCoverExclude)</ProjectPartCoverExclude>
     </PropertyGroup>
     <MSBuild
       Condition="Exists('%(Projects.RelativeDir)%(Projects.Filename)$(UnitTestsSuffix)%(Projects.Extension)')"
@@ -252,6 +261,17 @@ It must be used with MSBuild 4.0.
       Targets="Build"
       RunEachTargetSeparately="True"
     />
+  </Target>
+
+  <Target Name="InternalTestsXUnit"
+    Condition="'$(XUnitToolPath)'!=''"
+    Outputs="$(TestsOutputPath)%(Projects.Filename)\dummy.txt"
+  >
+    <PropertyGroup>
+      <ProjectFilename>%(Projects.Filename)</ProjectFilename>
+      <_OutDir>$(TestsOutputPath)%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_OutDir>
+      <ProjectPartCoverExclude>%(Projects.PartCoverExclude)</ProjectPartCoverExclude>
+    </PropertyGroup>
     <ItemGroup>
       <TestAssemblies Condition="Exists('$(_OutDir)')" Include="$(_OutDir)*$(UnitTestsSuffix).dll" />
       <AllAssemblies Condition="Exists('$(_OutDir)')" Include="$(_OutDir)*.dll;$(_OutDir)*.exe" />
@@ -278,7 +298,8 @@ It must be used with MSBuild 4.0.
       <PartCoverInclude Include="@(TestedAssemblies->'[%(Filename)]*')" />
       <PartCoverExclude Include="@(TestAssemblies->'[%(Filename)]*');@(TestedAssemblies->'[%(Filename)]*.Resources.*');@(TestedAssemblies->'[%(Filename)]*.NamespaceDoc')" />
     </ItemGroup>
-    <PartCover Condition="'@(TestAssemblies)'!=''"
+    <PartCover
+      Condition="'@(TestAssemblies)'!=''"
       Target="$(XUnitToolPath)"
       TargetArgs="&quot;$(_OutDir)$(ProjectFilename).xunit&quot; /silent"
       TargetWorkingDir="$(_OutDir)"
@@ -286,6 +307,27 @@ It must be used with MSBuild 4.0.
       Exclude="[xunit.*]*;$(ProjectPartCoverExclude);@(PartCoverExclude)"
       Output="$(TmpOutputPath)$(ProjectFilename).partcover-results.xml"
       ToolsVersion="4.0"
+    />
+  </Target>
+
+  <Target Name="InternalTestsMSTest"
+    Condition="'$(MSTestToolPath)'!=''"
+    Outputs="$(TestsOutputPath)%(Projects.Filename)\dummy.txt"
+  >
+    <!-- Build the tests -->
+    <PropertyGroup>
+      <ProjectFilename>%(Projects.Filename)</ProjectFilename>
+      <_OutDir>$(TestsOutputPath)%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <TestAssemblies Condition="Exists('$(_OutDir)')" Include="$(_OutDir)*$(UnitTestsSuffix).dll" />
+    </ItemGroup>
+
+    <Exec
+      Condition="'@(TestAssemblies)'!=''"
+      Command="&quot;$(MSTestToolPath)&quot; /nologo /noisolation /noresults /usestderr /testcontainer:&quot;%(TestAssemblies.FileName)%(TestAssemblies.Extension)&quot;"
+      WorkingDirectory="$(_OutDir)"
+      YieldDuringToolExecution="True"
     />
   </Target>
 
