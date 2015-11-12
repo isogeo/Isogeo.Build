@@ -30,6 +30,7 @@ namespace Isogeo.Build.Tasks
 
             builder.AppendSwitchUnquotedIfNotNull("", Action.ToString().ToLowerInvariant());
             builder.AppendSwitchIfNotNull("--registry", Registry);
+            builder.AppendSwitchUnquotedIfNotNull("", "--no-bin-link");
 
             string args=base.GenerateCommandLineCommands();
             if (!string.IsNullOrEmpty(args))

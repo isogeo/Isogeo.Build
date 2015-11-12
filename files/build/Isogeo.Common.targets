@@ -37,7 +37,7 @@ It must be used with MSBuild 4.0.
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <InputPath>$(MSBuildProjectDirectory)</InputPath>
+    <InputPath>$(MSBuildProjectDirectory)\.</InputPath>
     <RootPath Condition="'$(RootPath)'==''">$(MSBuildProjectDirectory)\..</RootPath>
 
     <VisualStudioVersion Condition="'$(VisualStudioVersion)'==''">12.0</VisualStudioVersion>
