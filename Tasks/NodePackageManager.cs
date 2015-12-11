@@ -29,8 +29,14 @@ namespace Isogeo.Build.Tasks
             builder.AppendFileNameIfNotNull(Path.Combine(Path.GetDirectoryName(GenerateFullPathToTool()), @"node_modules\npm\bin\npm-cli.js"));
 
             builder.AppendSwitchUnquotedIfNotNull("", Action.ToString().ToLowerInvariant());
-            builder.AppendSwitchIfNotNull("--registry", Registry);
-            builder.AppendSwitchUnquotedIfNotNull("", "--no-bin-link");
+            builder.AppendSwitchIfNotNull("", "--no-bin-link");
+            builder.AppendSwitchIfNotNull("", "--no-color");
+            builder.AppendSwitchIfNotNull("", "--no-progress");
+            builder.AppendSwitchIfNotNull("--registry ", Registry);
+
+            string gypMsvsVersion=Environment.GetEnvironmentVariable("GYP_MSVS_VERSION");
+            if (!string.IsNullOrWhiteSpace(gypMsvsVersion))
+                builder.AppendSwitchIfNotNull("--msvs_version=", gypMsvsVersion);
 
             string args=base.GenerateCommandLineCommands();
             if (!string.IsNullOrEmpty(args))
@@ -125,8 +131,8 @@ namespace Isogeo.Build.Tasks
 
         private NpmAction _Action;
 
-        private static Regex _Errors=new Regex(@"^npm\s+ERR!\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
-        private static Regex _Warnings=new Regex(@"^npm\s+WARN\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
+        private static Regex _Errors=new Regex(@"^(npm\s+)?ERR!\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
+        private static Regex _Warnings=new Regex(@"^(npm\s+)?WARN\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 
         private const string _GitInstallKey=@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1";
         private const string _GitInstallKeyWow6432=@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1";

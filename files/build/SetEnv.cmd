@@ -17,7 +17,13 @@ IF "%WindowsSdkVersion%"=="" (
   IF ERRORLEVEL 1 GOTO ERROR_NOWSDK
 )
 
-IF "%WindowsSdkVersion%"=="v8.0A" (
+IF "%WindowsSdkVersion%"=="v10.0A" (
+  IF EXIST "%VS140COMNTOOLS%vsvars32.bat" (
+    CALL "%VS140COMNTOOLS%vsvars32.bat" > nul
+    GOTO END
+  )
+  GOTO ERROR_NOWSDK
+)ELSE IF "%WindowsSdkVersion%"=="v8.0A" (
   IF EXIST "%VS120COMNTOOLS%vsvars32.bat" (
     CALL "%VS120COMNTOOLS%vsvars32.bat" > nul
     GOTO END
@@ -51,16 +57,22 @@ IF ERRORLEVEL 1 GOTO ERROR_NOWSDK
 IF EXIST "%WindowsSdkPath%Bin\SetEnv.cmd" (
   CALL "%WindowsSdkPath%Bin\SetEnv.cmd" %* > nul
   COLOR
-) ELSE (
-  GOTO ERROR_NOWSDK
 )
 GOTO END
 
 :SetWindowsSdkPathHelper
 SET WindowsSdkPath=
-FOR /F "tokens=1,2*" %%i in ('REG QUERY "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\%WindowsSdkVersion%" /V InstallationFolder') DO (
-    IF "%%i"=="InstallationFolder" (
-        SET "WindowsSdkPath=%%k"
+IF "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
+    FOR /F "tokens=1,2*" %%i in ('REG QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\%WindowsSdkVersion%" /V InstallationFolder') DO (
+        IF "%%i"=="InstallationFolder" (
+            SET "WindowsSdkPath=%%k"
+        )
+    )
+) ELSE (
+    FOR /F "tokens=1,2*" %%i in ('REG QUERY "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\%WindowsSdkVersion%" /V InstallationFolder') DO (
+        IF "%%i"=="InstallationFolder" (
+            SET "WindowsSdkPath=%%k"
+        )
     )
 )
 IF "%WindowsSdkPath%"=="" EXIT /B 1

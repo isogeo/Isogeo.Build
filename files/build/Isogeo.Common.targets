@@ -40,7 +40,7 @@ It must be used with MSBuild 4.0.
     <InputPath>$(MSBuildProjectDirectory)\.</InputPath>
     <RootPath Condition="'$(RootPath)'==''">$(MSBuildProjectDirectory)\..</RootPath>
 
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)'==''">12.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)'==''">14.0</VisualStudioVersion>
 
     <!-- Imported tasks paths -->
     <IsogeoMSBuildTasksPath Condition="'$(IsogeoMSBuildTasksPath)'==''">$(MSBuildThisFileDirectory)</IsogeoMSBuildTasksPath>
@@ -761,7 +761,7 @@ It must be used with MSBuild 4.0.
       Recursive="True"
       Product="$(PackageFileName)"
       Version="$(VersionMajor).$(VersionMinor).$(AutoVersionBuild).$(AutoVersionRevision)"
-      ToolPath="$(SystemDrive)\Program Files (x86)\Windows Kits\8.1\Debuggers\x64"
+      ToolPath="$(WindowsSdkPath)Debuggers\x64"
     />
     <ItemGroup>
       <PackagedItems Remove="@(PackagedItems)" />

@@ -45,7 +45,7 @@ namespace Isogeo.Build.Tasks
                 {
                     ret|=false;
                     Log.LogErrorFromException(new Win32Exception(Marshal.GetLastWin32Error()));
-
+                    continue;
                 }
 
                 Log.LogMessageFromText(
@@ -81,12 +81,26 @@ namespace Isogeo.Build.Tasks
             var pathBuilder=new StringBuilder();
             for (int i=0; i<dirs.Length; ++i )
             {
+                if (string.CompareOrdinal(dirs[i], ".")==0)
+                    continue;
+
                 pathBuilder.Append(dirs[i]);
                 pathBuilder.Append(Path.DirectorySeparatorChar);
 
                 var path=pathBuilder.ToString();
-                if (!Exists(path) && !CreateDirectory(string.Concat(@"\\?\", path), IntPtr.Zero))
-                    return false;
+                if (!Exists(path))
+                {
+                    Log.LogMessageFromText(
+                        string.Format(
+                            "Creating intermediate directory \"{0}\".",
+                            path
+                        ),
+                        MessageImportance.Low
+                    );
+
+                    if (!CreateDirectory(string.Concat(@"\\?\", path), IntPtr.Zero))
+                        return false;
+                }
             }
 
             return true;
