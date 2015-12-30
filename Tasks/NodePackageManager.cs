@@ -29,10 +29,13 @@ namespace Isogeo.Build.Tasks
             builder.AppendFileNameIfNotNull(Path.Combine(Path.GetDirectoryName(GenerateFullPathToTool()), @"node_modules\npm\bin\npm-cli.js"));
 
             builder.AppendSwitchUnquotedIfNotNull("", Action.ToString().ToLowerInvariant());
+            if (Production)
+                builder.AppendSwitchIfNotNull("", "--production");
             builder.AppendSwitchIfNotNull("", "--no-bin-link");
             builder.AppendSwitchIfNotNull("", "--no-color");
             builder.AppendSwitchIfNotNull("", "--no-progress");
             builder.AppendSwitchIfNotNull("--registry ", Registry);
+            builder.AppendSwitchIfNotNull("--cache ", Cache);
 
             string gypMsvsVersion=Environment.GetEnvironmentVariable("GYP_MSVS_VERSION");
             if (!string.IsNullOrWhiteSpace(gypMsvsVersion))
@@ -86,6 +89,17 @@ namespace Isogeo.Build.Tasks
         }
 
         public string Registry
+        {
+            get;
+            set;
+        }
+
+        public bool Production
+        {
+            get;
+            set;
+        }
+        public ITaskItem Cache
         {
             get;
             set;
