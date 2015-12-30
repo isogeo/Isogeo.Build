@@ -35,7 +35,7 @@ namespace Isogeo.Build.Tasks
             builder.AppendSwitchIfNotNull("", "--no-color");
             builder.AppendSwitchIfNotNull("", "--no-progress");
             builder.AppendSwitchIfNotNull("--registry ", Registry);
-            builder.AppendSwitchIfNotNull("--cache ", Cache);
+            builder.AppendSwitchIfNotNull("--cache ", Cache.ItemSpec);
 
             string gypMsvsVersion=Environment.GetEnvironmentVariable("GYP_MSVS_VERSION");
             if (!string.IsNullOrWhiteSpace(gypMsvsVersion))
