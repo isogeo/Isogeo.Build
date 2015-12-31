@@ -29,8 +29,15 @@ namespace Isogeo.Build.Tasks
             builder.AppendFileNameIfNotNull(Path.Combine(Path.GetDirectoryName(GenerateFullPathToTool()), @"node_modules\npm\bin\npm-cli.js"));
 
             builder.AppendSwitchUnquotedIfNotNull("", Action.ToString().ToLowerInvariant());
-            if (Production)
-                builder.AppendSwitchIfNotNull("", "--production");
+            switch (Only)
+            {
+            case NpmOnly.Development:
+                builder.AppendSwitchIfNotNull("--only=", "development");
+                break;
+            case NpmOnly.Production:
+                builder.AppendSwitchIfNotNull("--only=", "production");
+                break;
+            }
             builder.AppendSwitchIfNotNull("", "--no-bin-link");
             builder.AppendSwitchIfNotNull("", "--no-color");
             builder.AppendSwitchIfNotNull("", "--no-progress");
@@ -94,7 +101,7 @@ namespace Isogeo.Build.Tasks
             set;
         }
 
-        public bool Production
+        public NpmOnly Only
         {
             get;
             set;
@@ -158,5 +165,12 @@ namespace Isogeo.Build.Tasks
         Dedupe,
         RunScript,
         Update
+    }
+
+    public enum NpmOnly
+    {
+        All=0,
+        Development,
+        Production
     }
 }

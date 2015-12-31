@@ -24,9 +24,9 @@
 
 
   <Target Name="InstallNpmPackages">
-    <!-- Sometimes a complete install will fail (stack size exceeded, related to npmlog). Partial installs seem to do the trick... -->
-    <NodePackageManager Action="Install" Production="True" Cache="$(TmpOutputPath)\npm-cache" WorkingDirectory="$(InputPath)" />
-    <NodePackageManager Action="Install" Cache="$(TmpOutputPath)\npm-cache" WorkingDirectory="$(InputPath)" />
+    <!-- Sometimes a complete install will fail (stack size exceeded, related to npmlog). Partial installs seem to do the trick in some cases... -->
+    <NodePackageManager Action="Install" Only="Production" Cache="$(TmpOutputPath)\npm-cache" WorkingDirectory="$(InputPath)" />
+    <NodePackageManager Action="Install" Only="Development" Cache="$(TmpOutputPath)\npm-cache" WorkingDirectory="$(InputPath)" />
   </Target>
 
 
