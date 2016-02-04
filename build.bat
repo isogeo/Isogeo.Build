@@ -78,7 +78,7 @@ GOTO BUILD
 
 :SetMSBuildToolsPathHelper
 SET MSBuildToolsPath=
-FOR /F "tokens=1,2*" %%i in ('REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\12.0 /V MSBuildToolsPath') DO (
+FOR /F "tokens=1,2*" %%i in ('REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0 /V MSBuildToolsPath') DO (
     IF "%%i"=="MSBuildToolsPath" (
         SET "MSBuildToolsPath=%%k"
     )
