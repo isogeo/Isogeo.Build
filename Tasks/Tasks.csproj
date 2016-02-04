@@ -58,7 +58,6 @@
     <Compile Include="GetRelativePaths.cs" />
     <Compile Include="NodeJs.cs" />
     <Compile Include="FileInfo.cs" />
-    <Compile Include="FxCop.cs" />
     <Compile Include="MSTest.cs" />
     <Compile Include="NodePackageManager.cs" />
     <Compile Include="PartCover.cs" />

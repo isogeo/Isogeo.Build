@@ -44,6 +44,9 @@ It must be used with MSBuild 4.0.
 
     <!-- Imported tasks paths -->
     <IsogeoMSBuildTasksPath Condition="'$(IsogeoMSBuildTasksPath)'==''">$(MSBuildThisFileDirectory)</IsogeoMSBuildTasksPath>
+    <CodeAnalysisAvailable>False</CodeAnalysisAvailable>
+    <CodeAnalysisAvailable Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeAnalysis\Microsoft.CodeAnalysis.Targets')">True</CodeAnalysisAvailable>
+    <CodeAnalysisTargetsPath Condition="$(CodeAnalysisAvailable)">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeAnalysis\Microsoft.CodeAnalysis.Targets</CodeAnalysisTargetsPath>
     <TransformXmlAvailable>False</TransformXmlAvailable>
     <TransformXmlAvailable Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll')">True</TransformXmlAvailable>
     <TransformXmlTasksPath Condition="$(TransformXmlAvailable)">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll</TransformXmlTasksPath>
@@ -88,6 +91,7 @@ It must be used with MSBuild 4.0.
 
   <Import Project="$(MSBuildExtensionsPath32)\MSBuildCommunityTasks\MSBuild.Community.Tasks.targets" />
   <Import Project="$(IsogeoMSBuildTasksPath)\Isogeo.Build.Tasks.targets" />
+  <Import Condition="$(CodeAnalysisAvailable)" Project="$(CodeAnalysisTargetsPath)" />
   <UsingTask Condition="$(TransformXmlAvailable)" TaskName="TransformXml" AssemblyFile="$(TransformXmlTasksPath)" />
   <UsingTask TaskName="CompressorTask" AssemblyFile="$(MSBuildThisFileDirectory)\Yahoo.Yui.Compressor.dll" />
 
@@ -106,12 +110,12 @@ It must be used with MSBuild 4.0.
   <Target Name="Prepare" DependsOnTargets="$(PrepareDependsOn)" />
 
   <Target Name="PrepareEnvironment">
-    <SetEnvironmentVariable
+    <Isogeo.Build.Tasks.SetEnvironmentVariable
       Condition="'$(WindowsSdkVersion)'!=''"
       Variable="WindowsSdkVersion"
       Value="$(WindowsSdkVersion)"
     />
-    <SetEnvironmentFromBatch
+    <Isogeo.Build.Tasks.SetEnvironmentFromBatch
       BatchFile="$(BuildToolsPath)\SetEnv.cmd"
       BatchArguments="$(SetEnvironmentArguments)"
       EnableDelayedExpansion="True"
@@ -137,7 +141,7 @@ It must be used with MSBuild 4.0.
     <ItemGroup>
       <PackageConfigFiles Include="**\packages.config" />
     </ItemGroup>
-    <SetEnvironmentVariable
+    <Isogeo.Build.Tasks.SetEnvironmentVariable
       Condition="'$(EnableNuGetPackageRestore)'==''"
       Variable="EnableNuGetPackageRestore"
       Value="true"
@@ -316,7 +320,7 @@ It must be used with MSBuild 4.0.
   </PropertyGroup>
   <Target Name="Analysis" DependsOnTargets="$(AnalysisDependsOn)" />
 
-  <Target Name="InternalAnalysis" DependsOnTargets="InternalAnalysisCompile">
+  <Target Name="InternalAnalysis" Condition="$(CodeAnalysisAvailable)" DependsOnTargets="InternalAnalysisCompile">
     <PropertyGroup>
       <FxCopResultsFile>$(TmpOutputPath)fxcop-results.xml</FxCopResultsFile>
     </PropertyGroup>
@@ -332,17 +336,6 @@ It must be used with MSBuild 4.0.
       <Output TaskParameter="Filtered" ItemName="AnalysisDependenciesItems" />
     </RemoveDuplicates>
 
-    <!-- Create a FxCop project file -->
-    <Copy
-      SourceFiles="$(BuildToolsPath)\Empty.FxCop"
-      DestinationFiles="$(AnalysisOutputPath)$(ProjectName).FxCop"
-      OverwriteReadOnlyFiles="true"
-    />
-    <XmlPoke
-      XmlInputPath="$(AnalysisOutputPath)$(ProjectName).FxCop"
-      Query="/FxCopProject/@Name"
-      Value="$(ProjectName)"
-    />
     <Copy
       Condition="Exists('$(InputPath)\CustomDictionary.xml')"
       SourceFiles="$(InputPath)\CustomDictionary.xml"
@@ -351,21 +344,24 @@ It must be used with MSBuild 4.0.
     />
 
     <!-- Runs FxCop -->
-    <Isogeo.Build.Tasks.FxCop
+    <CodeAnalysis
       Condition="'@(AnalysisItems)'!=''"
-      ProjectFile="$(AnalysisOutputPath)$(ProjectName).FxCop"
-      TargetAssemblies="@(AnalysisItems)"
-      DependencyDirectories="@(AnalysisDependenciesItems)"
-      Dictionary="$(AnalysisOutputPath)CustomDictionary.xml"
-      DirectOutputToConsole="true"
-      AnalysisReportFileName="$(FxCopResultsFile)"
-      SaveResults="true"
-      FailOnError="false"
-      Verbose="false"
+      ContinueOnError="WarnAndContinue"
+      Assemblies="@(AnalysisItems)"
+      DependentAssemblyPaths="@(AnalysisDependenciesItems)"
+      Dictionaries="$(AnalysisOutputPath)CustomDictionary.xml"
+      IgnoreGeneratedCode="True"
+      LogFile="$(FxCopResultsFile)"
+      OutputToConsole="False"
+      SearchGlobalAssemblyCache="True"
+      Summary="True"
+      ToolPath="$(CodeAnalysisPath)"
+      Verbose="False"
     />
   </Target>
 
   <Target Name="InternalAnalysisCompile"
+    Condition="$(CodeAnalysisAvailable)"
     Outputs="$(AnalysisOutputPath)%(Projects.Filename)\ResolveAssemblyReference.cache"
   >
     <PropertyGroup>
