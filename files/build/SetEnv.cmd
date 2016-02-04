@@ -23,7 +23,7 @@ IF "%WindowsSdkVersion%"=="v10.0A" (
     GOTO END
   )
   GOTO ERROR_NOWSDK
-)ELSE IF "%WindowsSdkVersion%"=="v8.0A" (
+) ELSE IF "%WindowsSdkVersion%"=="v8.0A" (
   IF EXIST "%VS120COMNTOOLS%vsvars32.bat" (
     CALL "%VS120COMNTOOLS%vsvars32.bat" > nul
     GOTO END

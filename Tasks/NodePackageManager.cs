@@ -29,7 +29,7 @@ namespace Isogeo.Build.Tasks
             builder.AppendFileNameIfNotNull(Path.Combine(Path.GetDirectoryName(GenerateFullPathToTool()), @"node_modules\npm\bin\npm-cli.js"));
 
             builder.AppendSwitchUnquotedIfNotNull("", Action.ToString().ToLowerInvariant());
-            switch (Only)
+            switch (_Only)
             {
             case NpmOnly.Development:
                 builder.AppendSwitchIfNotNull("--only=", "development");
@@ -101,11 +101,18 @@ namespace Isogeo.Build.Tasks
             set;
         }
 
-        public NpmOnly Only
+        public string Only
         {
-            get;
-            set;
+            get
+            {
+                return _Only.ToString();
+            }
+            set
+            {
+                _Only=(NpmOnly)Enum.Parse(typeof(NpmOnly), value, true);
+            }
         }
+
         public ITaskItem Cache
         {
             get;
@@ -151,6 +158,7 @@ namespace Isogeo.Build.Tasks
 #pragma warning restore 618
 
         private NpmAction _Action;
+        private NpmOnly _Only;
 
         private static Regex _Errors=new Regex(@"^(npm\s+)?ERR!\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
         private static Regex _Warnings=new Regex(@"^(npm\s+)?WARN\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
