@@ -148,7 +148,7 @@ It must be used with MSBuild 4.0.
     />
     <Exec
       Condition="'@(PackageConfigFiles)'!=''"
-      Command="&quot;$(NuGetToolPath)&quot; install &quot;%(PackageConfigFiles.Identity)&quot; -o packages -source &quot;https://nuget.org/api/v2/&quot; -source &quot;http://nuget.hq.isogeo.fr/nuget/&quot; -source &quot;$(LocalAppData)\NuGet\Cache&quot;"
+      Command="&quot;$(NuGetToolPath)&quot; install &quot;%(PackageConfigFiles.Identity)&quot; -o packages -source &quot;https://api.nuget.org/v3/index.json&quot; -source &quot;http://CHANTIERS.hq.isogeo.fr/nuget/nuget&quot; -source &quot;http://NUGET.hq.isogeo.fr/nuget&quot; -source &quot;$(LocalAppData)\NuGet\Cache&quot;"
       WorkingDirectory="$(InputPath)"
       YieldDuringToolExecution="True"
     />
