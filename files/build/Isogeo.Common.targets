@@ -731,7 +731,7 @@ It must be used with MSBuild 4.0.
       Recursive="True"
       Product="$(PackageFileName)"
       Version="$(VersionMajor).$(VersionMinor).$(AutoVersionBuild).$(AutoVersionRevision)"
-      ToolPath="$(WindowsSdkDir)Debuggers\x64"
+      ToolPath="$(WindowsSdkPath)Debuggers\x64"
     />
     <ItemGroup>
       <PackagedItems Remove="@(PackagedItems)" />
