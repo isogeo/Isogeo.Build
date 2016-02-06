@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Win32=Microsoft.Win32;
+using Win32 = Microsoft.Win32;
 
 namespace Isogeo.Build.Tasks
 {
@@ -38,7 +34,7 @@ namespace Isogeo.Build.Tasks
                 builder.AppendSwitchIfNotNull("--only=", "production");
                 break;
             }
-            builder.AppendSwitchIfNotNull("", "--no-bin-link");
+            builder.AppendSwitchIfNotNull("", "--no-bin-links");
             builder.AppendSwitchIfNotNull("", "--no-color");
             builder.AppendSwitchIfNotNull("", "--no-progress");
             builder.AppendSwitchIfNotNull("--registry ", Registry);
