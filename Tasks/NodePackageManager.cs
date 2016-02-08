@@ -142,7 +142,7 @@ namespace Isogeo.Build.Tasks
                         }
                         ret.Add(
                             "PATH",
-                            string.Join(";", path, Path.Combine(Path.GetDirectoryName(Path.GetFullPath(p.ToString())), "bin"))
+                            string.Join(";", path, GetShortPathName(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(p.ToString())), "bin")))
                         );
                         return ret;
                     }
