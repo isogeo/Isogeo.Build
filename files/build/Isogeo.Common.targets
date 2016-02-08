@@ -197,7 +197,6 @@ It must be used with MSBuild 4.0.
       Targets="Clean"
       RunEachTargetSeparately="True"
     />
-    <RemoveDir Directories="$(TmpOutputPath)" />
   </Target>
 
   <Target Name="BeforeClean" />
