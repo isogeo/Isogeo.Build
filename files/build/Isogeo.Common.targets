@@ -120,7 +120,9 @@ It must be used with MSBuild 4.0.
       BatchArguments="$(SetEnvironmentArguments)"
       EnableDelayedExpansion="True"
       EnableExtensions="True"
-    />
+    >
+      <Output TaskParameter="WindowsSdkDir" PropertyName="WindowsSdkDir" />
+    </Isogeo.Build.Tasks.SetEnvironmentFromBatch>
   </Target>
 
   <Target Name="PrepareToolPaths" Condition="Exists('$(InputPath)\.nuget\packages.config')">
@@ -730,7 +732,7 @@ It must be used with MSBuild 4.0.
       Recursive="True"
       Product="$(PackageFileName)"
       Version="$(VersionMajor).$(VersionMinor).$(AutoVersionBuild).$(AutoVersionRevision)"
-      ToolPath="$(WindowsSdkPath)Debuggers\x64"
+      ToolPath="$(WindowsSdkDir)Debuggers\x64"
     />
     <ItemGroup>
       <PackagedItems Remove="@(PackagedItems)" />

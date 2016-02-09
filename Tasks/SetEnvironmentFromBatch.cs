@@ -173,6 +173,8 @@ namespace Isogeo.Build.Tasks
                         {
                             Log.LogMessageFromText(string.Format(CultureInfo.CurrentCulture, "SET {0}={1}", name, value), MessageImportance.Normal);
                             Environment.SetEnvironmentVariable(name, value, EnvironmentVariableTarget.Process);
+                            if (string.Compare(name, "WindowsSdkDir", StringComparison.OrdinalIgnoreCase)==0)
+                                WindowsSdkDir=new TaskItem(value);
                         }
                     }
                 }
@@ -207,6 +209,13 @@ namespace Isogeo.Build.Tasks
 
         [Required]
         public ITaskItem BatchFile
+        {
+            get;
+            set;
+        }
+
+        [Output]
+        public ITaskItem WindowsSdkDir
         {
             get;
             set;
