@@ -38,6 +38,7 @@
   <Target Name="CoreClean">
     <NodeJs
       Arguments="$(APPDATA)/npm/node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; clean:complete"
+      LogStandardErrorAsError="False"
       WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
      />
@@ -61,6 +62,7 @@
 
     <NodeJs
       Arguments="$(APPDATA)/npm/node_modules/grunt-cli/bin/grunt --no-color --dest=&quot;$(OutputPath)&quot; $(BuildTargets)"
+      LogStandardErrorAsError="False"
       WorkingDirectory="$(InputPath)"
       PathAdditions="$(PathAdditions)"
      />

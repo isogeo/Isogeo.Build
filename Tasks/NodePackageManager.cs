@@ -156,8 +156,8 @@ namespace Isogeo.Build.Tasks
         private NpmAction _Action;
         private NpmOnly _Only;
 
-        private static Regex _Errors=new Regex(@"^(npm\s+)?ERR!\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
-        private static Regex _Warnings=new Regex(@"^(npm\s+)?WARN\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
+        private static Regex _Errors=new Regex(@"^\s*(npm\s+)?ERR!\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
+        private static Regex _Warnings=new Regex(@"^\s*(npm\s+)?WARN\s+((?<MESSAGE>.+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 
         private const string _GitInstallKey=@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1";
         private const string _GitInstallKeyWow6432=@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1";
