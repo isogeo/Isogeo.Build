@@ -8,6 +8,7 @@
 
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.FileInfo" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.GetRelativePaths" />
+  <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.GetShortPathName" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.LongPathCopy" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.MSTest" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.NodeJs" />

@@ -10,7 +10,7 @@
 
     <InputPath Condition=" '$(InputPath)'=='' ">..\..\..\..</InputPath>
 
-    <OutputPath Condition=" '$(OutDir)'!='' ">$(OutDir)$(AppName)</OutputPath>
+    <OutputPath Condition=" '$(OutDir)'!='' ">$(OutDir)\$(AppName)</OutputPath>
     <OutputPath Condition=" '$(OutputPath)'=='' ">dist</OutputPath>
 
     <TmpOutputPath Condition=" '$(TmpOutputPath)'=='' ">tmp</TmpOutputPath>

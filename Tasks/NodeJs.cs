@@ -135,19 +135,6 @@ namespace Isogeo.Build.Tasks
             return base.GetWorkingDirectory();
         }
 
-        internal static string GetShortPathName(string path)
-        {
-            if (path.Length>256)
-                path.Insert(0, @"\\?\");
-
-            var spath=new StringBuilder(255);
-            GetShortPathName(path, spath, 255);
-            return spath.ToString();
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern int GetShortPathName(string path, StringBuilder shortPath, int shortPathLength);
-
         public string Arguments
         {
             get;
@@ -183,11 +170,11 @@ namespace Isogeo.Build.Tasks
             get
             {
                 var ret=new StringDictionary();
-                string path=GetShortPathName(Path.GetDirectoryName(GenerateFullPathToTool()));
+                string path=GetShortPathName.Execute(Path.GetDirectoryName(GenerateFullPathToTool()));
 
                 if ((PathAdditions!=null) && (PathAdditions.Length>0))
                 {
-                    var additions=new List<string>(PathAdditions.Select(p => GetShortPathName(p)));
+                    var additions=new List<string>(PathAdditions.Select(p => GetShortPathName.Execute(p)));
                     additions.Add(path);
                     additions.Add(Environment.GetEnvironmentVariable("PATH"));
                     ret.Add(
@@ -200,7 +187,6 @@ namespace Isogeo.Build.Tasks
                         "PATH",
                         string.Join(";", path, Environment.GetEnvironmentVariable("PATH"))
                     );
-
 
                 return ret;
             }

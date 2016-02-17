@@ -194,11 +194,17 @@ It must be used with MSBuild 4.0.
       <_IntermediateOutputPath>$(IntermediateOutputPath)bin\%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_IntermediateOutputPath>
     </PropertyGroup>
     <MSBuild
+      Condition="'%(Projects.Extension)'!='.js'"
       Projects="$(_ProjectName)"
       RebaseOutputs="True"
       Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;BuildType=$(BuildType);%(Projects.Properties)"
       Targets="Clean"
       RunEachTargetSeparately="True"
+    />
+    <Exec
+      Condition="'%(Projects.Extension)'=='.js'"
+      Command="&quot;$(MSBuildToolsPath)\MSBuild.exe&quot; &quot;$(_ProjectName)&quot; /nologo /t:Clean /p:InputPath=&quot;$(InputPath)\.&quot; /p:OutDir=&quot;$(_OutDir)\.&quot; /p:IntermediateOutputPath=&quot;$(_IntermediateOutputPath)\.&quot; /p:RebaseOutputs=True /p:BuildType=$(BuildType) /p:%(Projects.Properties) /nr:False"
+      YieldDuringToolExecution="True"
     />
   </Target>
 
@@ -225,6 +231,7 @@ It must be used with MSBuild 4.0.
       <_IntermediateOutputPath>$(IntermediateOutputPath)bin\%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_IntermediateOutputPath>
     </PropertyGroup>
     <MSBuild
+      Condition="'%(Projects.Extension)'!='.js'"
       Projects="$(_ProjectName)"
       RebaseOutputs="True"
       Properties="Configuration=%(Projects.Configuration);Platform=%(Projects.Platform);DefineConstants=%(Projects.Constants);InputPath=$(InputPath);OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True;BuildType=$(BuildType);%(Projects.Properties)"
@@ -233,6 +240,11 @@ It must be used with MSBuild 4.0.
     >
       <Output TaskParameter="TargetOutputs" ItemName="CompileOutputs" />
     </MSBuild>
+    <Exec
+      Condition="'%(Projects.Extension)'=='.js'"
+      Command="&quot;$(MSBuildToolsPath)\MSBuild.exe&quot; &quot;$(_ProjectName)&quot; /nologo /t:Build /p:InputPath=&quot;$(InputPath)\.&quot; /p:OutDir=&quot;$(_OutDir)\.&quot; /p:IntermediateOutputPath=&quot;$(_IntermediateOutputPath)\.&quot; /p:RebaseOutputs=True /p:BuildType=$(BuildType) /p:%(Projects.Properties) /nr:False"
+      YieldDuringToolExecution="True"
+    />
   </Target>
 
   <Target Name="BeforeCompile" />
