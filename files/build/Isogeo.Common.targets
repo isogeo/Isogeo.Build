@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <!-- //////////////////////////////////////////////////////////////////////////
 This file defines the steps in the standard Isogeo.Api build process, specific for C# .NET projects.
 It must be used with MSBuild 4.0.
@@ -60,7 +59,7 @@ It must be used with MSBuild 4.0.
     <BuildToolsPath Condition="'$(BuildToolsPath)'==''">$(MSBuildThisFileDirectory)</BuildToolsPath>
     <InstallToolsPath Condition="'$(InstallToolsPath)'==''">$(MSBuildThisFileDirectory)\..\install\</InstallToolsPath>
     <NuGetToolPath Condition="'$(NuGetToolPath)'==''">$(InputPath)\.nuget\NuGet.exe</NuGetToolPath>
-    <XUnitToolPath Condition="'$(XUnitToolPath)'==''">$(InputPath)\lib\xunit\xunit.console.clr4.x86.exe</XUnitToolPath>
+    <XUnitToolPath Condition="'$(XUnitToolPath)'==''">$(InputPath)\lib\xunit\xunit.console.x86.exe</XUnitToolPath>
     <MSDeployToolPath Condition="'$(MSDeployToolPath)'==''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3@InstallPath)msdeploy.exe</MSDeployToolPath>
     <GitToolPath Condition="'$(GitToolPath)'==''">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))bin\git.exe</GitToolPath>
 
@@ -128,13 +127,13 @@ It must be used with MSBuild 4.0.
 
   <Target Name="PrepareToolPaths" Condition="Exists('$(InputPath)\.nuget\packages.config')">
     <XmlPeek
-      Query="/packages/package[@id='xunit.runners']/@version"
+      Query="/packages/package[@id='xunit.runner.console']/@version"
       XmlInputPath="$(InputPath)\.nuget\packages.config"
     >
       <Output TaskParameter="Result" PropertyName="XUnitToolVersion" />
     </XmlPeek>
     <PropertyGroup>
-      <XUnitToolPath Condition="'$(XUnitToolVersion)'!=''">$(MSBuildProjectDirectory)\packages\xunit.runners.$(XUnitToolVersion)\tools\xunit.console.clr4.x86.exe</XUnitToolPath>
+      <XUnitToolPath Condition="'$(XUnitToolVersion)'!=''">$(MSBuildProjectDirectory)\packages\xunit.runner.console.$(XUnitToolVersion)\tools\xunit.console.x86.exe</XUnitToolPath>
       <XUnitToolPath Condition="!Exists('$(XUnitToolPath)')" />
     </PropertyGroup>
   </Target>
@@ -291,21 +290,6 @@ It must be used with MSBuild 4.0.
       <TestedAssemblies Condition="Exists('%(AllAssemblies.RootDir)%(AllAssemblies.Directory)%(AllAssemblies.Filename)$(UnitTestsSuffix).dll')" Include="@(AllAssemblies)" />
     </ItemGroup>
 
-    <!-- Create a xunit project file: it's the only way to test multiple assemblies in a single run -->
-    <Copy
-      SourceFiles="$(MSBuildThisFileDirectory)\Empty.xunit"
-      DestinationFiles="$(_OutDir)$(ProjectsFileName).xunit"
-      OverwriteReadOnlyFiles="true"
-    />
-    <ItemGroup>
-      <XUnitAssemblies Include="&lt;assembly filename=&quot;$(_OutDir)%(TestAssemblies.Filename)%(TestAssemblies.Extension)&quot; shadow-copy=&quot;false&quot;&gt;&lt;output type=&quot;xml&quot; filename=&quot;$(TmpOutputPath)$(ProjectFilename)_%(TestAssemblies.Filename).xunit-results.xml&quot; /&gt;&lt;/assembly&gt;" />
-    </ItemGroup>
-    <XmlPoke
-      XmlInputPath="$(_OutDir)$(ProjectsFileName).xunit"
-      Query="/xunit/assemblies"
-      Value="@(XUnitAssemblies->'%(Identity)', '')"
-    />
-
     <!-- Tests + code coverage -->
     <ItemGroup>
       <PartCoverInclude Include="@(TestedAssemblies->'[%(Filename)]*')" />
@@ -314,7 +298,7 @@ It must be used with MSBuild 4.0.
     <PartCover
       Condition="'@(TestAssemblies)'!=''"
       Target="$(XUnitToolPath)"
-      TargetArgs="&quot;$(_OutDir)$(ProjectsFileName).xunit&quot; /silent"
+      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -noshadow -quiet @(TestAssemblies->'-nunit &quot;$(TmpOutputPath)%(Filename).xunit-results.xml&quot;', ' ')"
       TargetWorkingDir="$(_OutDir)"
       Include="@(PartCoverInclude)"
       Exclude="[xunit.*]*;$(ProjectPartCoverExclude);@(PartCoverExclude)"
