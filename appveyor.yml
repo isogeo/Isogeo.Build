@@ -1,0 +1,29 @@
+version: 1.1.2.{build}
+
+os: Windows Server 2012
+install:
+  - cmd: MKDIR tmp
+  - cmd: CD tmp
+  - ps: Start-FileDownload 'https://github.com/loresoft/msbuildtasks/releases/download/v1.4.0.69/MSBuild.Community.Tasks.v1.4.0.69.msi'
+  - cmd: msiexec.exe /qn /norestart /i MSBuild.Community.Tasks.v1.4.0.69.msi ALLUSERS=1 /l*v "install-msbuildtasks.log"
+  - ps: Start-FileDownload 'https://github.com/downloads/sawilde/partcover.net4/PartCover.Setup-v4.0.20908.msi'
+  - cmd: msiexec.exe /qn /norestart /i PartCover.Setup-v4.0.20908.msi ALLUSERS=1 /l*v "install-partcover.log"
+  - cmd: CD ..
+  - cmd: FOR /F "tokens=1,2*" %%i in ('REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0 /V MSBuildToolsPath') DO IF "%%i"=="MSBuildToolsPath" SET "PATH=%%k;%PATH%"
+cache:
+  - packages -> **\packages.config
+
+build:
+  project: Isogeo.Build.proj
+  parallel: true
+  verbosity: minimal
+build_script:
+  - cmd: msbuild.exe Isogeo.Build.proj /nologo /t:UpdateVersion;Release /m /l:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /v:m /fl /flp:logfile=tmp\build.log;verbosity=diagnostic;encoding=UTF-8 /nr:False
+platform: Any CPU
+configuration: Release
+before_build:
+  - cmd: SET CCNetLabel=%APPVEYOR_BUILD_VERSION%
+  - cmd: .\.nuget\NuGet.exe install .\.nuget\packages.config -o packages
+
+test_script:
+  - ps: (Resolve-Path tmp\*.xunit-results.xml) | ForEach-Object { (New-Object Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", $_) }
