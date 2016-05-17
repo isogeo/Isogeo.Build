@@ -24,6 +24,8 @@ configuration: Release
 before_build:
   - cmd: SET CCNetLabel=%APPVEYOR_BUILD_VERSION%
   - cmd: .\.nuget\NuGet.exe install .\.nuget\packages.config -o packages
+after_build:
+  - ps: Get-ChildItem tmp\out\bin\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
 test_script:
   - ps: (Resolve-Path tmp\*.xunit-results.xml) | ForEach-Object { (New-Object Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", $_) }
