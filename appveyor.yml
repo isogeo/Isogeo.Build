@@ -34,7 +34,7 @@ artifacts:
 
 deploy:
   - provider: NuGet
-    server: http://CHANTIERS.hq.isogeo.fr/nuget
+    server: http://CHANTIERS.hq.isogeo.fr:1080/nuget/
     api_key:
       secure: dhIRC1uq0713VuNuLt7qUw==
     artifact: /.*\.nupkg/
