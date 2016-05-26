@@ -24,8 +24,26 @@ configuration: Release
 before_build:
   - cmd: SET CCNetLabel=%APPVEYOR_BUILD_VERSION%
   - cmd: .\.nuget\NuGet.exe install .\.nuget\packages.config -o packages
-after_build:
-  - ps: Get-ChildItem tmp\out\bin\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
 test_script:
   - ps: (Resolve-Path tmp\*.xunit-results.xml) | ForEach-Object { (New-Object Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", $_) }
+
+artifacts:
+  - path: tmp\out\bin\*.nupkg
+    type: NuGet
+
+deploy:
+  - provider: NuGet
+    server: http://CHANTIERS.hq.isogeo.fr/nuget
+    api_key:
+      secure: dhIRC1uq0713VuNuLt7qUw==
+    skip_symbols: true
+    on:
+      branch: master
+  - provider: NuGet
+    api_key:
+      secure: 6qsDT4uV1HnaEVNi4hV2R9qG12o3ZVXgoZjGgxDvImFhm6d11CUTqoSXxfZ/3uAN
+    skip_symbols: true
+    on:
+      branch: master
+      appveyor_repo_tag: true
