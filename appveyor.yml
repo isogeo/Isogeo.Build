@@ -33,14 +33,14 @@ artifacts:
     type: NuGet
 
 deploy:
-  - provider: NuGet
-    server: http://CHANTIERS.hq.isogeo.fr:1080/nuget/
-    api_key:
-      secure: dhIRC1uq0713VuNuLt7qUw==
-    artifact: /.*\.nupkg/
-    skip_symbols: true
-    on:
-      branch: master
+#  - provider: NuGet
+#    server: http://CHANTIERS.hq.isogeo.fr:1080/nuget/
+#    api_key:
+#      secure: dhIRC1uq0713VuNuLt7qUw==
+#    artifact: /.*\.nupkg/
+#    skip_symbols: true
+#    on:
+#      branch: master
   - provider: NuGet
     api_key:
       secure: 6qsDT4uV1HnaEVNi4hV2R9qG12o3ZVXgoZjGgxDvImFhm6d11CUTqoSXxfZ/3uAN
@@ -52,7 +52,6 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: Rlhui0x/FJviVHpu89ZGy0PnEuzqsrMpECDjoSGb2+OkKm0UixP+LtMIEDy4XX1K
-    release: 'v$(appveyor_build_version)'
     description: ''
     artifact: /.*\.nupkg/
     draft: true
