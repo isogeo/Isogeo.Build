@@ -47,3 +47,12 @@ deploy:
     on:
       branch: master
       appveyor_repo_tag: true
+  - provider: GitHub
+    auth_token:
+      secure: Rlhui0x/FJviVHpu89ZGy0PnEuzqsrMpECDjoSGb2+OkKm0UixP+LtMIEDy4XX1K
+    release: 'v$(appveyor_build_version)'
+    description: ''
+    draft: true
+    on:
+      branch: master
+      appveyor_repo_tag: true
