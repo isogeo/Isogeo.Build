@@ -433,7 +433,7 @@ It must be used with MSBuild 4.0.
       RunEachTargetSeparately="True"
     /> -->
     <Exec
-      Command="&quot;$(MSBuildToolsPath)\MSBuild.exe&quot; &quot;%(SandcastleProjects.Identity)&quot; /nologo /p:Configuration=Release /p:Platform=AnyCPU /p:OutDir=&quot;$(_DocOutputPath).&quot; /p:IntermediateOutputPath=&quot;$(_DocIntermediateOutputPath).&quot; /p:Preliminary=$(PreliminaryParameterValue) /p:HelpFileVersion=$(CCNetLabel) /nr:False"
+      Command="&quot;$(MSBuildToolsPath)\MSBuild.exe&quot; &quot;%(SandcastleProjects.Identity)&quot; /nologo /p:Configuration=Release /p:Platform=AnyCPU /p:OutDir=&quot;$(_DocOutputPath)\&quot; /p:IntermediateOutputPath=&quot;$(_DocIntermediateOutputPath)\&quot; /p:Preliminary=$(PreliminaryParameterValue) /p:HelpFileVersion=$(CCNetLabel) /nr:False"
       YieldDuringToolExecution="True"
     />
   </Target>
