@@ -32,7 +32,7 @@ GOTO ARGS
 :: Builds the project
 :: -------------------------------------------------------------------
 :BUILD
-.nuget\NuGet.exe install ".nuget\packages.config" -o packages -source "https://nuget.org/api/v2/" -source "http://nuget.hq.isogeo.fr/nuget/" -source "%LocalAppData%\NuGet\Cache"
+.nuget\NuGet.exe install ".nuget\packages.config" -o packages
 msbuild.exe %PROJECT% /nologo /t:%TARGET% /m:%NUMBER_OF_PROCESSORS% /p:GenerateDocumentation="%GENERATE_DOCUMENTATION%" /fl /flp:logfile=build.log;verbosity=%VERBOSITY%;encoding=UTF-8 /nr:False
 
 IF ERRORLEVEL 1 (
