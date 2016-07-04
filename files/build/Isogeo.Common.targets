@@ -150,8 +150,8 @@ It must be used with MSBuild 4.0.
     />
     <Exec
       Condition="'@(PackageConfigFiles)'!=''"
-      Command="&quot;$(NuGetToolPath)&quot; install &quot;%(PackageConfigFiles.Identity)&quot; -o packages"
-      WorkingDirectory="$(InputPath)"
+      Command="&quot;$(NuGetToolPath)&quot; install &quot;%(PackageConfigFiles.Identity)&quot; -o ..\packages"
+      WorkingDirectory="$(InputPath)\.nuget"
       YieldDuringToolExecution="True"
     />
     <!--<MSBuild
