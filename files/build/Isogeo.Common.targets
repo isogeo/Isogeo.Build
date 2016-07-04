@@ -59,7 +59,6 @@ It must be used with MSBuild 4.0.
     <BuildToolsPath Condition="'$(BuildToolsPath)'==''">$(MSBuildThisFileDirectory)</BuildToolsPath>
     <InstallToolsPath Condition="'$(InstallToolsPath)'==''">$(MSBuildThisFileDirectory)\..\install\</InstallToolsPath>
     <NuGetToolPath Condition="'$(NuGetToolPath)'==''">$(InputPath)\.nuget\NuGet.exe</NuGetToolPath>
-    <NuGetConfigPath Condition="'$(NuGetToolPath)'==''">$(InputPath)\.nuget\NuGet.config</NuGetConfigPath>
     <XUnitToolPath Condition="'$(XUnitToolPath)'==''">$(InputPath)\lib\xunit\xunit.console.x86.exe</XUnitToolPath>
     <MSDeployToolPath Condition="'$(MSDeployToolPath)'==''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3@InstallPath)msdeploy.exe</MSDeployToolPath>
     <GitToolPath Condition="'$(GitToolPath)'==''">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))bin\git.exe</GitToolPath>
@@ -151,7 +150,7 @@ It must be used with MSBuild 4.0.
     />
     <Exec
       Condition="'@(PackageConfigFiles)'!=''"
-      Command="&quot;$(NuGetToolPath)&quot; install &quot;%(PackageConfigFiles.Identity)&quot; -o packages -configfile &quot;$(NuGetConfigPath)&quot;"
+      Command="&quot;$(NuGetToolPath)&quot; install &quot;%(PackageConfigFiles.Identity)&quot; -o packages"
       WorkingDirectory="$(InputPath)"
       YieldDuringToolExecution="True"
     />
