@@ -150,7 +150,7 @@ It must be used with MSBuild 4.0.
     />
     <Exec
       Condition="'@(PackageConfigFiles)'!=''"
-      Command="&quot;$(NuGetToolPath)&quot; restore &quot;%(PackageConfigFiles.Identity)&quot; -PackagesDirectory ..\packages"
+      Command="&quot;$(NuGetToolPath)&quot; restore &quot;%(PackageConfigFiles.FullPath)&quot; -PackagesDirectory ..\packages"
       WorkingDirectory="$(InputPath)\.nuget"
       YieldDuringToolExecution="True"
     />
