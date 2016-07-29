@@ -298,7 +298,7 @@ It must be used with MSBuild 4.0.
     <PartCover
       Condition="'@(TestAssemblies)'!=''"
       Target="$(XUnitToolPath)"
-      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -noshadow -quiet @(TestAssemblies->'-nunit &quot;$(TmpOutputPath)%(Filename).xunit-results.xml&quot;', ' ')"
+      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -noshadow -quiet @(TestAssemblies->'-xml &quot;$(TmpOutputPath)%(Filename).xunit-results.xml&quot;', ' ')"
       TargetWorkingDir="$(_OutDir)"
       Include="@(PartCoverInclude)"
       Exclude="[xunit.*]*;$(ProjectPartCoverExclude);@(PartCoverExclude)"
