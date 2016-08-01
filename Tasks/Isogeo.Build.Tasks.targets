@@ -16,6 +16,7 @@
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.PartCover" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.SetEnvironmentFromBatch" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.SetEnvironmentVariable" />
+  <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.SonarQubeRunner" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.VersionInfo" />
   <UsingTask AssemblyFile="$(IsogeoMSBuildTasksLib)" TaskName="Isogeo.Build.Tasks.XmlSchemasValidate" />
 </Project>

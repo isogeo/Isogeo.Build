@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- //////////////////////////////////////////////////////////////////////////
 This file defines the steps in the standard Isogeo.Api build process, specific for C# .NET projects.
 It must be used with MSBuild 4.0.
@@ -359,7 +360,7 @@ It must be used with MSBuild 4.0.
   </Target>
 
   <Target Name="InternalAnalysisCompile"
-    Condition="$(CodeAnalysisAvailable)"
+    Condition="$(CodeAnalysisAvailable) And '%(Projects.Extension)'!='.js'"
     Outputs="$(AnalysisOutputPath)%(Projects.Filename)\ResolveAssemblyReference.cache"
   >
     <PropertyGroup>
@@ -367,8 +368,16 @@ It must be used with MSBuild 4.0.
       <_IntermediateOutputPath>$(IntermediateOutputPath)analysis\%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_IntermediateOutputPath>
     </PropertyGroup>
 
+    <SonarQubeRunner
+      Condition="'$(CCNetLabel)'!=''"
+      Action="Begin"
+      ProjectKey="$(MSBuildProjectName)"
+      ProjectName="$(MSBuildProjectName)"
+      ProjectVersion="$(CCNetLabel)"
+      ToolPath="$(MSBuildThisFileDirectory)"
+      WorkingDirectory="$(InputPath)"
+    />
     <MSBuild
-      Condition="'%(Projects.Extension)'!='.js'"
       Projects="%(Projects.Identity)"
       RebaseOutputs="True"
       Targets="Build"
@@ -377,6 +386,10 @@ It must be used with MSBuild 4.0.
     >
       <Output TaskParameter="TargetOutputs" ItemName="AnalysisOutputs" />
     </MSBuild>
+    <SonarQubeRunner
+      Condition="'$(CCNetLabel)'!=''"
+      Action="End"
+    />
   </Target>
 
   <Target Name="InternalStats">
