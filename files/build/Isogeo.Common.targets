@@ -360,7 +360,7 @@ It must be used with MSBuild 4.0.
   </Target>
 
   <Target Name="InternalAnalysisCompile"
-    Condition="$(CodeAnalysisAvailable) And '%(Projects.Extension)'!='.js'"
+    Condition="$(CodeAnalysisAvailable)"
     Outputs="$(AnalysisOutputPath)%(Projects.Filename)\ResolveAssemblyReference.cache"
   >
     <PropertyGroup>
@@ -369,7 +369,7 @@ It must be used with MSBuild 4.0.
     </PropertyGroup>
 
     <SonarQubeRunner
-      Condition="'$(CCNetLabel)'!=''"
+      Condition="'$(CCNetLabel)'!='' And '%(Projects.Extension)'!='.js'"
       Action="Begin"
       ProjectKey="$(MSBuildProjectName)"
       ProjectName="$(MSBuildProjectName)"
@@ -378,6 +378,7 @@ It must be used with MSBuild 4.0.
       WorkingDirectory="$(InputPath)"
     />
     <MSBuild
+      Condition="'%(Projects.Extension)'!='.js'"
       Projects="%(Projects.Identity)"
       RebaseOutputs="True"
       Targets="Build"
@@ -387,7 +388,7 @@ It must be used with MSBuild 4.0.
       <Output TaskParameter="TargetOutputs" ItemName="AnalysisOutputs" />
     </MSBuild>
     <SonarQubeRunner
-      Condition="'$(CCNetLabel)'!=''"
+      Condition="'$(CCNetLabel)'!='' And '%(Projects.Extension)'!='.js'"
       Action="End"
     />
   </Target>
