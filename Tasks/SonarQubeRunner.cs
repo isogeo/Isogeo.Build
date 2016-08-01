@@ -18,7 +18,7 @@ namespace Isogeo.Build.Tasks
             builder.AppendSwitchIfNotNull("/k:", ProjectKey);
             builder.AppendSwitchIfNotNull("/n:", ProjectName);
             builder.AppendSwitchIfNotNull("/v:", ProjectVersion);
-            builder.AppendSwitchIfNotNull("/s:", Settings.ItemSpec);
+            builder.AppendSwitchIfNotNull("/s:", Settings);
 
             string options = Environment.GetEnvironmentVariable("SONAR_SCANNER_OPTS");
             if (!string.IsNullOrWhiteSpace(options))

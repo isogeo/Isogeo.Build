@@ -374,6 +374,7 @@ It must be used with MSBuild 4.0.
       ProjectKey="$(MSBuildProjectName)"
       ProjectName="$(MSBuildProjectName)"
       ProjectVersion="$(CCNetLabel)"
+      Settings="SonarQube.Analysis.xml"
       ToolPath="$(MSBuildThisFileDirectory)"
     />
     <MSBuild
