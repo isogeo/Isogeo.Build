@@ -375,7 +375,6 @@ It must be used with MSBuild 4.0.
       ProjectName="$(MSBuildProjectName)"
       ProjectVersion="$(CCNetLabel)"
       ToolPath="$(MSBuildThisFileDirectory)"
-      WorkingDirectory="$(InputPath)"
     />
     <MSBuild
       Condition="'%(Projects.Extension)'!='.js'"

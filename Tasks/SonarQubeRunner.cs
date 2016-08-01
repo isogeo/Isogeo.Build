@@ -15,9 +15,10 @@ namespace Isogeo.Build.Tasks
             var builder = new CommandLineBuilder();
 
             builder.AppendSwitchUnquotedIfNotNull("", Action.ToString().ToLowerInvariant());
-            builder.AppendSwitchIfNotNull("/k: ", ProjectKey);
-            builder.AppendSwitchIfNotNull("/n: ", ProjectName);
-            builder.AppendSwitchIfNotNull("/v: ", ProjectVersion);
+            builder.AppendSwitchIfNotNull("/k:", ProjectKey);
+            builder.AppendSwitchIfNotNull("/n:", ProjectName);
+            builder.AppendSwitchIfNotNull("/v:", ProjectVersion);
+            builder.AppendSwitchIfNotNull("/s:", Settings.ItemSpec);
 
             string options = Environment.GetEnvironmentVariable("SONAR_SCANNER_OPTS");
             if (!string.IsNullOrWhiteSpace(options))
@@ -58,6 +59,8 @@ namespace Isogeo.Build.Tasks
         public string ProjectName { get; set; }
 
         public string ProjectVersion { get; set; }
+
+        public ITaskItem Settings { get; set; }
 
         protected override string ToolName {  get { return "MSBuild.SonarQube.Runner.exe"; } }
 
