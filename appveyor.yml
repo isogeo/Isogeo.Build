@@ -23,9 +23,9 @@ platform: Any CPU
 configuration: Release
 before_build:
   - cmd: SET CCNetLabel=%APPVEYOR_BUILD_VERSION%
-  - cmd: PUSHD .nuget
+  - cmd: CD .nuget
   - cmd: NuGet.exe restore "packages.config" -PackagesDirectory ..\packages
-  - cmd: POPD
+  - cmd: CD ..
 
 test_script:
   - ps: (Resolve-Path tmp\*.xunit-results.xml) | ForEach-Object { (New-Object Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", $_) }
