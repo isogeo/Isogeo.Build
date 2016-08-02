@@ -97,9 +97,9 @@ It must be used with MSBuild 4.0.
   <UsingTask TaskName="CompressorTask" AssemblyFile="$(MSBuildThisFileDirectory)\Yahoo.Yui.Compressor.dll" />
 
   <!-- Main targets -->
-  <Target Name="Build" DependsOnTargets="$(BuildDependsOn);Analysis" />
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
   <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
-  <Target Name="Complete" DependsOnTargets="Build;Document;Package" />
+  <Target Name="Complete" DependsOnTargets="Build;Document;Package;Analysis" />
   <Target Name="Release" DependsOnTargets="Clean;Complete" />
 
 
