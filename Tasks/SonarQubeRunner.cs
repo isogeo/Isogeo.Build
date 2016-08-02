@@ -62,7 +62,7 @@ namespace Isogeo.Build.Tasks
 
         public ITaskItem Settings { get; set; }
 
-        protected override string ToolName {  get { return "MSBuild.SonarQube.Runner.exe"; } }
+        protected override string ToolName { get { return "MSBuild.SonarQube.Runner.exe"; } }
 
         private SonarQubeAction _Action;
     }

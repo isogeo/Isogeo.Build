@@ -315,7 +315,7 @@ It must be used with MSBuild 4.0.
 
   <!-- Performs a code analysis the project -->
   <PropertyGroup>
-    <AnalysisDependsOn>Prepare;BeforeAnalysis;InternalStats;InternalAnalysis;AfterAnalysis</AnalysisDependsOn>
+    <AnalysisDependsOn>Prepare;BeforeAnalysis;InternalAnalysisSonarBegin;InternalAnalysis;InternalAnalysisSonarEnd;InternalStats;AfterAnalysis</AnalysisDependsOn>
   </PropertyGroup>
   <Target Name="Analysis" DependsOnTargets="$(AnalysisDependsOn)" />
 
@@ -359,8 +359,26 @@ It must be used with MSBuild 4.0.
     />
   </Target>
 
+  <Target Name="InternalAnalysisSonarBegin"
+    Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!=''"
+  >
+    <SonarQubeRunner
+      Action="Begin"
+      ProjectKey="$(MSBuildProjectName)"
+      ProjectName="$(MSBuildProjectName)"
+      ProjectVersion="$(CCNetLabel)"
+      Settings="$(InputPath)\SonarQube.Analysis.xml"
+      ToolPath="$(MSBuildThisFileDirectory)"
+    />
+  </Target>
+
   <Target Name="InternalAnalysisCompile"
     Condition="$(CodeAnalysisAvailable)"
+    DependsOnTargets="InternalAnalysisCompileAll;InternalAnalysisCompileSingle"
+  />
+
+  <Target Name="InternalAnalysisCompileAll"
+    Condition="$(CodeAnalysisAvailable) And !Exists('$(InputPath)\$(MSBuildProjectName).Analysis.sln')"
     Outputs="$(AnalysisOutputPath)%(Projects.Filename)\ResolveAssemblyReference.cache"
   >
     <PropertyGroup>
@@ -368,15 +386,6 @@ It must be used with MSBuild 4.0.
       <_IntermediateOutputPath>$(IntermediateOutputPath)analysis\%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_IntermediateOutputPath>
     </PropertyGroup>
 
-    <SonarQubeRunner
-      Condition="'$(CCNetLabel)'!='' And '%(Projects.Extension)'!='.js'"
-      Action="Begin"
-      ProjectKey="$(MSBuildProjectName)"
-      ProjectName="$(MSBuildProjectName)"
-      ProjectVersion="$(CCNetLabel)"
-      Settings="SonarQube.Analysis.xml"
-      ToolPath="$(MSBuildThisFileDirectory)"
-    />
     <MSBuild
       Condition="'%(Projects.Extension)'!='.js'"
       Projects="%(Projects.Identity)"
@@ -387,9 +396,33 @@ It must be used with MSBuild 4.0.
     >
       <Output TaskParameter="TargetOutputs" ItemName="AnalysisOutputs" />
     </MSBuild>
+  </Target>
+
+  <Target Name="InternalAnalysisCompileSingle"
+    Condition="$(CodeAnalysisAvailable) And Exists('$(InputPath)\$(MSBuildProjectName).Analysis.sln')"
+  >
+    <PropertyGroup>
+      <_OutDir>$(AnalysisOutputPath)bin\$(MSBuildProjectName)\</_OutDir>
+      <_IntermediateOutputPath>$(IntermediateOutputPath)analysis\$(MSBuildProjectName)\</_IntermediateOutputPath>
+    </PropertyGroup>
+
+    <MSBuild
+      Projects="$(InputPath)\$(MSBuildProjectName).Analysis.sln"
+      RebaseOutputs="True"
+      Targets="Build"
+      Properties="DefineConstants=CODE_ANALYSIS;OutDir=$(_OutDir);IntermediateOutputPath=$(_IntermediateOutputPath);RebaseOutputs=True"
+      RunEachTargetSeparately="True"
+    >
+      <Output TaskParameter="TargetOutputs" ItemName="AnalysisOutputs" />
+    </MSBuild>
+  </Target>
+
+  <Target Name="InternalAnalysisSonarEnd"
+    Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!=''"
+  >
     <SonarQubeRunner
-      Condition="'$(CCNetLabel)'!='' And '%(Projects.Extension)'!='.js'"
       Action="End"
+      ToolPath="$(MSBuildThisFileDirectory)"
     />
   </Target>
 
