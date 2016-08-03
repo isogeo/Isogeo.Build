@@ -431,7 +431,7 @@ It must be used with MSBuild 4.0.
       <ClocResultsFile>$(TmpOutputPath)cloc-results.xml</ClocResultsFile>
     </PropertyGroup>
     <Exec
-      Command="&quot;$(MSBuildThisFileDirectory)\cloc.exe&quot; $(InputPath) --exclude-dir=bin,bower_components,build,dist,doc,lib,node_modules,obj,packages,tmp,vendor,GeneratedCode --exclude-ext=csproj,dbmdl,proj,sln,sqlproj,suo,user --not-match-f=&quot;(^jquery.*|.*?min\.js$|^_)&quot; --3 --quiet --progress-rate=0 --xml --report_file=&quot;$(ClocResultsFile)&quot;"
+      Command="&quot;$(MSBuildThisFileDirectory)\cloc.exe&quot; $(InputPath) --exclude-dir=.sonar,.sonarqube,.vscode,bin,bower_components,build,dist,doc,lib,node_modules,obj,packages,tmp,vendor,GeneratedCode --exclude-ext=csproj,dbmdl,proj,sln,sqlproj,suo,user --not-match-f=&quot;(^jquery.*|.*?min\.js$|^_)&quot; --3 --quiet --progress-rate=0 --xml --report_file=&quot;$(ClocResultsFile)&quot;"
       WorkingDirectory="$(InputPath)"
       YieldDuringToolExecution="True"
       IgnoreExitCode="True"
