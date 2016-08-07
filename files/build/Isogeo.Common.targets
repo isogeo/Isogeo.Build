@@ -60,7 +60,7 @@ It must be used with MSBuild 4.0.
     <BuildToolsPath Condition="'$(BuildToolsPath)'==''">$(MSBuildThisFileDirectory)</BuildToolsPath>
     <InstallToolsPath Condition="'$(InstallToolsPath)'==''">$(MSBuildThisFileDirectory)\..\install\</InstallToolsPath>
     <NuGetToolPath Condition="'$(NuGetToolPath)'==''">$(InputPath)\.nuget\NuGet.exe</NuGetToolPath>
-    <XUnitToolPath Condition="'$(XUnitToolPath)'==''">$(InputPath)\lib\xunit\xunit.console.x86.exe</XUnitToolPath>
+    <XUnitToolPath Condition="'$(XUnitToolPath)'==''">$(InputPath)\lib\xunit\xunit.console.exe</XUnitToolPath>
     <MSDeployToolPath Condition="'$(MSDeployToolPath)'==''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3@InstallPath)msdeploy.exe</MSDeployToolPath>
     <GitToolPath Condition="'$(GitToolPath)'==''">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))bin\git.exe</GitToolPath>
 
@@ -93,6 +93,7 @@ It must be used with MSBuild 4.0.
   <Import Project="$(MSBuildExtensionsPath32)\MSBuildCommunityTasks\MSBuild.Community.Tasks.targets" />
   <Import Project="$(IsogeoMSBuildTasksPath)\Isogeo.Build.Tasks.targets" />
   <Import Condition="$(CodeAnalysisAvailable)" Project="$(CodeAnalysisTargetsPath)" />
+  <Import Project="$(MSBuildProjectDirectory)\packages\OpenCover.*\MSBuild\OpenCover.targets" />
   <UsingTask Condition="$(TransformXmlAvailable)" TaskName="TransformXml" AssemblyFile="$(TransformXmlTasksPath)" />
   <UsingTask TaskName="CompressorTask" AssemblyFile="$(MSBuildThisFileDirectory)\Yahoo.Yui.Compressor.dll" />
 
@@ -134,7 +135,7 @@ It must be used with MSBuild 4.0.
       <Output TaskParameter="Result" PropertyName="XUnitToolVersion" />
     </XmlPeek>
     <PropertyGroup>
-      <XUnitToolPath Condition="'$(XUnitToolVersion)'!=''">$(MSBuildProjectDirectory)\packages\xunit.runner.console.$(XUnitToolVersion)\tools\xunit.console.x86.exe</XUnitToolPath>
+      <XUnitToolPath Condition="'$(XUnitToolVersion)'!=''">$(MSBuildProjectDirectory)\packages\xunit.runner.console.$(XUnitToolVersion)\tools\xunit.console.exe</XUnitToolPath>
       <XUnitToolPath Condition="!Exists('$(XUnitToolPath)')" />
     </PropertyGroup>
   </Target>
@@ -283,7 +284,7 @@ It must be used with MSBuild 4.0.
     <PropertyGroup>
       <ProjectsFileName>%(Projects.Filename)</ProjectsFileName>
       <_OutDir>$(TestsOutputPath)%(Projects.FileName)\%(Projects.Configuration)\%(Projects.Platform)\</_OutDir>
-      <ProjectPartCoverExclude>%(Projects.PartCoverExclude)</ProjectPartCoverExclude>
+      <ProjectOpenCoverFilter>%(Projects.OpenCoverFilter)</ProjectOpenCoverFilter>
     </PropertyGroup>
     <ItemGroup>
       <TestAssemblies Condition="Exists('$(_OutDir)')" Include="$(_OutDir)*$(UnitTestsSuffix).dll" />
@@ -293,18 +294,17 @@ It must be used with MSBuild 4.0.
 
     <!-- Tests + code coverage -->
     <ItemGroup>
-      <PartCoverInclude Include="@(TestedAssemblies->'[%(Filename)]*')" />
-      <PartCoverExclude Include="@(TestAssemblies->'[%(Filename)]*');@(TestedAssemblies->'[%(Filename)]*.Resources.*');@(TestedAssemblies->'[%(Filename)]*.NamespaceDoc')" />
+      <OpenCoverFilter Include="@(TestedAssemblies->'+[%(Filename)]*');@(TestAssemblies->'-[%(Filename)]*');@(TestedAssemblies->'-[%(Filename)]*.Resources.*');@(TestedAssemblies->'-[%(Filename)]*.NamespaceDoc')" />
     </ItemGroup>
-    <PartCover
+    <OpenCover
       Condition="'@(TestAssemblies)'!=''"
       Target="$(XUnitToolPath)"
-      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -noshadow -quiet @(TestAssemblies->'-xml &quot;$(TmpOutputPath)%(Filename).xunit-results.xml&quot;', ' ')"
+      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -nocolor -noshadow -quiet @(TestAssemblies->'-xml &quot;$(TmpOutputPath)%(Filename).xunit-results.xml&quot;', ' ')"
       TargetWorkingDir="$(_OutDir)"
-      Include="@(PartCoverInclude)"
-      Exclude="[xunit.*]*;$(ProjectPartCoverExclude);@(PartCoverExclude)"
-      Output="$(TmpOutputPath)$(ProjectsFileName).partcover-results.xml"
-      ToolsVersion="4.0"
+	  ReturnTargetCode="True"
+      CoverByTest="@(TestAssemblies->'%(Filename)%(Extension)')"
+      Filter="@(OpenCoverFilter);-[xunit.*]*;$(ProjectOpenCoverFilter)"
+      Output="$(TmpOutputPath)$(ProjectsFileName).opencover-results.xml"
     />
   </Target>
 
@@ -846,12 +846,11 @@ It must be used with MSBuild 4.0.
     Name="InternalUpdateVersionNuSpecFiles"
     Outputs="%(Projects.Filename).nuspec"
   >
-    <XmlUpdate
+    <XmlPoke
       Condition="Exists('%(Projects.Filename).nuspec')"
-      XmlFileName="%(Projects.Filename).nuspec"
-      Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
-      Prefix="ns"
-      XPath="/ns:package/ns:metadata/ns:version"
+      XmlInputPath="%(Projects.Filename).nuspec"
+      Namespaces="&lt;Namespace Prefix='ns' Uri='http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd' /&gt;"
+      Query="/ns:package/ns:metadata/ns:version"
       Value="$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)"
     />
   </Target>

@@ -10,6 +10,8 @@
   <PropertyGroup>
     <ProjectName Condition="'$(ProjectName)'==''">$(MSBuildProjectName)</ProjectName>
     <WindowsSdkVersion>v10.0A</WindowsSdkVersion>
+    <IsogeoMSBuildTasksFile>$([System.IO.Directory]::GetFiles('$(MSBuildProjectDirectory)\packages', 'Isogeo.Build.Tasks.dll', System.IO.SearchOption.AllDirectories))</IsogeoMSBuildTasksFile>
+    <IsogeoMSBuildTasksPath>$([System.IO.Directory]::GetParent('$(IsogeoMSBuildTasksFile)'))</IsogeoMSBuildTasksPath>
   </PropertyGroup>
 
   
@@ -33,5 +35,5 @@
 
 
   <!-- Import external targets -->
-  <Import Project="$(MSBuildProjectDirectory)\packages\Isogeo.Build.*\tools\build\Isogeo.Common.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\files\build\Isogeo.Common.targets" />
 </Project>
