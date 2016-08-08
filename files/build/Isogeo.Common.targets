@@ -299,7 +299,7 @@ It must be used with MSBuild 4.0.
     <OpenCover
       Condition="'@(TestAssemblies)'!=''"
       Target="$(XUnitToolPath)"
-      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -nocolor -noshadow -quiet @(TestAssemblies->'-xml &quot;$(TmpOutputPath)%(Filename).xunit-results.xml&quot;', ' ')"
+      TargetArgs="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') -nologo -nocolor -noshadow -quiet -xml &quot;$(TmpOutputPath)$(ProjectsFileName).xunit-results.xml&quot;"
       TargetWorkingDir="$(_OutDir)"
 	  ReturnTargetCode="True"
       CoverByTest="@(TestAssemblies->'%(Filename)%(Extension)')"
