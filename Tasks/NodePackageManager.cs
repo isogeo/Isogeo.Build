@@ -34,7 +34,6 @@ namespace Isogeo.Build.Tasks
                 builder.AppendSwitchIfNotNull("--only=", "production");
                 break;
             }
-            builder.AppendSwitchIfNotNull("", "--no-bin-links");
             builder.AppendSwitchIfNotNull("", "--no-color");
             builder.AppendSwitchIfNotNull("", "--no-progress");
             builder.AppendSwitchIfNotNull("--registry ", Registry);
