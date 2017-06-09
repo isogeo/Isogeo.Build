@@ -33,10 +33,13 @@ namespace Isogeo.Build.Tasks
 
         protected override string GenerateFullPathToTool()
         {
-            string path = null;
+            string path = Environment.GetEnvironmentVariable("SONAR_SCANNER_HOME");
 
             if (!string.IsNullOrEmpty(ToolPath))
                 path=Path.GetDirectoryName(Path.GetFullPath(ToolPath));
+
+            // The scanner resets SONAR_SCANNER_HOME for some reason?
+            Environment.SetEnvironmentVariable("_SONAR_SCANNER_HOME", path, EnvironmentVariableTarget.Process);
 
             return Path.Combine(path, ToolExe);
         }
@@ -62,7 +65,7 @@ namespace Isogeo.Build.Tasks
 
         public ITaskItem Settings { get; set; }
 
-        protected override string ToolName { get { return "MSBuild.SonarQube.Runner.exe"; } }
+        protected override string ToolName { get { return "SonarQube.Scanner.MSBuild.exe"; } }
 
         private SonarQubeAction _Action;
     }

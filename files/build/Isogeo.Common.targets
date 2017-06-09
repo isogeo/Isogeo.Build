@@ -368,7 +368,7 @@ It must be used with MSBuild 4.0.
       ProjectName="$(MSBuildProjectName)"
       ProjectVersion="$(CCNetLabel)"
       Settings="$(InputPath)\SonarQube.Analysis.xml"
-      ToolPath="$(MSBuildThisFileDirectory)"
+      ToolPath="$(MSBuildThisFileDirectory)SonarQube"
     />
   </Target>
 
@@ -422,7 +422,7 @@ It must be used with MSBuild 4.0.
   >
     <SonarQubeRunner
       Action="End"
-      ToolPath="$(MSBuildThisFileDirectory)"
+      ToolPath="$(MSBuildThisFileDirectory)SonarQube"
     />
   </Target>
 
