@@ -364,6 +364,7 @@ It must be used with MSBuild 4.0.
   >
     <SonarQubeRunner
       Action="Begin"
+      ContinueOnError="WarnAndContinue"
       ProjectKey="$(MSBuildProjectName)"
       ProjectName="$(MSBuildProjectName)"
       ProjectVersion="$(CCNetLabel)"
@@ -422,6 +423,7 @@ It must be used with MSBuild 4.0.
   >
     <SonarQubeRunner
       Action="End"
+      ContinueOnError="WarnAndContinue"
       ToolPath="$(MSBuildThisFileDirectory)SonarQube"
     />
   </Target>
