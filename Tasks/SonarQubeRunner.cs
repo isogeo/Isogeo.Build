@@ -10,6 +10,21 @@ namespace Isogeo.Build.Tasks
         ToolTask
     {
 
+        public override bool Execute()
+        {
+            var home = Environment.GetEnvironmentVariable("SONAR_SCANNER_HOME");
+
+            if (!string.IsNullOrEmpty(home))
+            {
+                // The scanner resets SONAR_SCANNER_HOME for some reason?
+                EnvironmentVariables=new string[] {
+                    "_SONAR_SCANNER_HOME=" + home
+                };
+            }
+
+            return base.Execute();
+        }
+
         protected override string GenerateCommandLineCommands()
         {
             var builder = new CommandLineBuilder();
@@ -33,13 +48,14 @@ namespace Isogeo.Build.Tasks
 
         protected override string GenerateFullPathToTool()
         {
-            string path = Environment.GetEnvironmentVariable("SONAR_SCANNER_HOME");
+            string path = Environment.CurrentDirectory;
 
             if (!string.IsNullOrEmpty(ToolPath))
-                path=Path.GetDirectoryName(Path.GetFullPath(ToolPath));
-
-            // The scanner resets SONAR_SCANNER_HOME for some reason?
-            Environment.SetEnvironmentVariable("_SONAR_SCANNER_HOME", path, EnvironmentVariableTarget.Process);
+            {
+                path=Path.GetFullPath(ToolPath);
+                if (!Directory.Exists(ToolPath))
+                    path=Path.GetDirectoryName(path);
+            }
 
             return Path.Combine(path, ToolExe);
         }
