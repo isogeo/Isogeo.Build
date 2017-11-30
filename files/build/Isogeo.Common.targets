@@ -360,7 +360,7 @@ It must be used with MSBuild 4.0.
   </Target>
 
   <Target Name="InternalAnalysisSonarBegin"
-    Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!=''"
+    Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!='' And '$(CCNetLabel)'!='0.0.0.0'"
   >
     <SonarQubeRunner
       Action="Begin"
@@ -368,6 +368,7 @@ It must be used with MSBuild 4.0.
       ProjectKey="$(MSBuildProjectName)"
       ProjectName="$(MSBuildProjectName)"
       ProjectVersion="$(CCNetLabel)"
+      BranchName="$(GitBranchName)"
       Settings="$(InputPath)\SonarQube.Analysis.xml"
       ToolPath="$(MSBuildThisFileDirectory)SonarQube"
     />
@@ -419,7 +420,7 @@ It must be used with MSBuild 4.0.
   </Target>
 
   <Target Name="InternalAnalysisSonarEnd"
-    Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!=''"
+    Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!='' And '$(CCNetLabel)'!='0.0.0.0'"
   >
     <SonarQubeRunner
       Action="End"

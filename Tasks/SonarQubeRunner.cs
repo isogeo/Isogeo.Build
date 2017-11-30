@@ -34,6 +34,7 @@ namespace Isogeo.Build.Tasks
             builder.AppendSwitchIfNotNull("/n:", ProjectName);
             builder.AppendSwitchIfNotNull("/v:", ProjectVersion);
             builder.AppendSwitchIfNotNull("/s:", Settings);
+            builder.AppendSwitchIfNotNull("/d:sonar.branch.name=", BranchName);
 
             string options = Environment.GetEnvironmentVariable("SONAR_SCANNER_OPTS");
             if (!string.IsNullOrWhiteSpace(options))
@@ -78,6 +79,10 @@ namespace Isogeo.Build.Tasks
         public string ProjectName { get; set; }
 
         public string ProjectVersion { get; set; }
+
+        /// <summary>The name of the branch to be analyzed.</summary>
+        /// <seealso href="https://docs.sonarqube.org/display/PLUG/Branch+Plugin" />
+        public string BranchName { get; set; }
 
         public ITaskItem Settings { get; set; }
 
