@@ -772,6 +772,7 @@ It must be used with MSBuild 4.0.
     <MakeDir Condition="!Exists('$(SymbolsStorePath)') And $(ProjectsPackaged) And '@(SymbolItems)'!='' And !Exists('$(ProjectsFileName).nuspec')" Directories="$(SymbolsStorePath)" />
     <SymStore
       Condition="$(ProjectsPackaged) And '@(SymbolItems)'!='' And !Exists('$(ProjectsFileName).nuspec')"
+      ContinueOnError="WarnAndContinue"
       Files="$(TmpOutPdbOutputPath)$(PackageBaseName)"
       Store="$(SymbolsStorePath)"
       Local="True"
