@@ -82,13 +82,17 @@ namespace Isogeo.Build.Tasks
 
         /// <summary>The name of the branch to be analyzed.</summary>
         /// <seealso href="https://docs.sonarqube.org/display/PLUG/Branch+Plugin" />
-        public string BranchName { get; set; }
+        public string BranchName {
+            get { return _BranchName; }
+            set { _BranchName=(string.IsNullOrEmpty(value) ? null : value); }
+        }
 
         public ITaskItem Settings { get; set; }
 
         protected override string ToolName { get { return "SonarQube.Scanner.MSBuild.exe"; } }
 
         private SonarQubeAction _Action;
+        private string _BranchName;
     }
 
     public enum SonarQubeAction

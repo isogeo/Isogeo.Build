@@ -362,13 +362,17 @@ It must be used with MSBuild 4.0.
   <Target Name="InternalAnalysisSonarBegin"
     Condition="Exists('$(InputPath)\SonarQube.Analysis.xml') And $(CodeAnalysisAvailable) And '$(CCNetLabel)'!='' And '$(CCNetLabel)'!='0.0.0.0'"
   >
+    <PropertyGroup>
+      <_SonarQubeBranchName Condition="'$(GitBranchName)'!='master'">$(GitBranchName)</_SonarQubeBranchName>
+    </PropertyGroup>
+
     <SonarQubeRunner
       Action="Begin"
       ContinueOnError="WarnAndContinue"
       ProjectKey="$(MSBuildProjectName)"
       ProjectName="$(MSBuildProjectName)"
       ProjectVersion="$(CCNetLabel)"
-      BranchName="$(GitBranchName)"
+      BranchName="$(_SonarQubeBranchName)"
       Settings="$(InputPath)\SonarQube.Analysis.xml"
       ToolPath="$(MSBuildThisFileDirectory)SonarQube"
     />
