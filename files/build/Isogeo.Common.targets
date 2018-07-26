@@ -143,7 +143,7 @@ It must be used with MSBuild 4.0.
   <!-- Projects should update themselves, but required because of http://nuget.codeplex.com/discussions/297078 -->
   <Target Name="PrepareDependencies">
     <ItemGroup>
-      <PackageConfigFiles Include="**\packages.config" Exclude="packages\**\*.*;node_modules\**\*.*;tmp\**\*.*" />
+      <PackageConfigFiles Include="$(InputPath)\.nuget\packages.config" Exclude="packages\**\*.*;node_modules\**\*.*;tmp\**\*.*" />
     </ItemGroup>
     <Isogeo.Build.Tasks.SetEnvironmentVariable
       Condition="'$(EnableNuGetPackageRestore)'==''"
