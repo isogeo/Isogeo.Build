@@ -5,17 +5,19 @@
     <authors>dev@isogeo.com</authors>
     <owners>Isogeo</owners>
     <Copyright>Copyright © 2012-2019 Isogeo</Copyright>
-    <PackageId>Isogeo.Build</PackageId>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Scripts and tools required for Isogeo continuous integration.</description>
+    <PackageId>Isogeo.Build</PackageId>
     <RepositoryUrl>https://github.com/isogeo/Isogeo.Build</RepositoryUrl>
     <PackageProjectUrl>http://geosikdev.blogspot.com/</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Isogeo</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net40</TargetFramework>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <ProductVersion>8.0.30703</ProductVersion>
     <RootNamespace>Isogeo.Build.Tasks</RootNamespace>
     <AssemblyName>Isogeo.Build.Tasks</AssemblyName>
-    <TargetFramework>net40</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
@@ -48,13 +50,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Isogeo.Build.snk">
-      <Link>Isogeo.Build.snk</Link>
-    </None>
     <Content Include="Isogeo.Build.Tasks.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Isogeo.Build.snk">
+      <Link>Isogeo.Build.snk</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Tasks.Tests\NodePackageManagerTest.cs" />
