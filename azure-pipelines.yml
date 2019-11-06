@@ -16,101 +16,56 @@ trigger:
 pr:
 - master
 
-variables:
-  solution: 'Isogeo.Build.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  Isogeo.Build: '$(System.DefaultWorkingDirectory)/Tasks/bin/Release/*'
+### GLOBAL VARIABLES ###
 
+variables:
+
+  ## ARTIFACTS CONFIGURATION ##
+  nuGetsArtifactName: 'Isogeo.BuildNuGets'
+  buildArtifactName : 'Isogeo.BuildBuild'
+
+  ## GENERAL CONFIGURATION ##
+  solution: 'Isogeo.Build.Tests.sln'
+  vmImage: 'windows-2019'
+  artifactDirLocation: $(System.DefaultWorkingDirectory)
+
+  ## NUGET PUBLICATION ##
+  nuGetPackagePatternToPublish: $(artifactPath)/**/*.nupkg
+  nuGetSource: https://api.nuget.org/v3/index.json
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: isogeo/devops-templates
+      ref: refs/tags/v1.2.0
+      endpoint: isogeo
 
 stages:
-- stage: Deploy
+
+# See templates/wiki for more details about parameters (isogeo/devops-templates repository)
+# Mandatory : solution
+- template: Net/Pipeline/NuGetsPipelineWithoutPublish.yml@templates
+  parameters:
+    solution: $(solution)
+    nuGetsArtifactName: $(nuGetsArtifactName)
+    buildArtifactName : $(buildArtifactName)
+
+- stage: 'Publish'
   jobs:
+  - job: 'PublishNuGets'
+    pool:
+      vmImage: $(vmImage)
+    variables:
+      artifactPath: $(artifactDirLocation)/$(nuGetsArtifactName)
+    steps:
+    - template: /Net/Utilities/DownloadNuGetsArtifact.yml@templates
+      parameters:
+        nugetVersion: 5.1.0
+        nuGetsArtifactName: $(nuGetsArtifactName)
+        artifactDirLocation: $(System.DefaultWorkingDirectory)
+    - script: nuget push $(nuGetPackagePatternToPublish) -Source $(nuGetSource) -ApiKey $(apikey) -SkipDuplicate -NoSymbols
+      displayName: 'Publish NuGet packages to www.nuget.org'
 
-## FIRST JOB ###
 
-    - job: 'GenerateNuGetPackages'
-      pool:
-        vmImage: 'windows-2019'
 
-      variables:
-        SolutionDir: $(System.DefaultWorkingDirectory)
-        artifactDirectoryName: 'NuGetFolder'
-        artifactDirectoryLocation: $(System.DefaultWorkingDirectory)
-        artifactPath: $(artifactDirectoryLocation)\$(artifactDirectoryName)
-
-      steps:
-      - task: NuGetToolInstaller@1
-        displayName: "Installation NuGet Configuration"
-
-      - task: NuGetCommand@2
-        displayName: 'Restore NuGet packages'
-        inputs:
-          restoreSolution: $(solution)
-          configuration: $(buildConfiguration)
-
-      - task: VSBuild@1
-        displayName: 'Compilation Isogeo.BuildSolution'
-        inputs:
-          solution: $(solution)
-          vsVersion: latest
-          msbuildArchitecture: x64
-          msbuildArgs: '/p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true'
-          platform: $(buildPlatform)
-          configuration: $(buildConfiguration)
-
-      - task: NuGetCommand@2
-        displayName: 'Generation NuGet packages'
-        inputs:
-          command: 'pack'
-          configuration: $(buildConfiguration)
-          packagesToPack: '**\*.csproj;!**\*.Tests.csproj'
-
-      - powershell: cd $(artifactDirectoryLocation); if ($?){new-item -Name $(artifactDirectoryName) -ItemType directory}
-        displayName: 'Create NuGet Folder'
-
-      - powershell: cd $(artifactPath); if ($?){echo "*.xml`r*.xsd`r*.csv`r*.dll`r*.pdb`r*.metadata`r*.p7s`r*.targets`r*.props`r*.json`r*.cache`r*.XML`r*.config`r.git`r*.nuget/`r.gitignore`r*.sln`r*.csproj`r*.cs`r*.yml`r*.bat`r*.proj`r*.md`r*.csproj`r*.txt`r*.nuspec`r*.snk`r*.resx`r" > .artifactignore}; if ($?){Get-Content .artifactignore} else{echo "error generation artifactignore file"; exit 1}
-        displayName: 'add .artifactignore file'
-
-        ## Action : Copy nupkg files
-        ## Put "-Recurse" at the end of each copies if you also need to obtain dll, xml, ... files
-        ## Don't forget to change in consequence .artifactignore file, a precedent task
-      - powershell: |
-          Copy-Item -Path $(Isogeo.Build) -Destination $(artifactPath)/Isogeo.Build;
-        displayName: 'Copy NuGet Packages to NuGet folder'
-
-      - task: PublishPipelineArtifact@1
-        displayName: 'Generation NuGet artifacts'
-        inputs:
-          artifact: $(NuGetArtifactName)
-          path: $(artifactPath)
-
-## SECOND JOB ###
-
-    - job: 'PublishNuGetPackage'
-      dependsOn: GenerateNuGetPackages
-      pool:
-        vmImage: 'windows-2019'
-      strategy:
-        maxParallel: 1
-        matrix:
-          {
-            FileTransfer: { package: $(System.DefaultWorkingDirectory)/Isogeo.Build/*.nupkg},
-          }
-
-      steps:
-
-      - task: DownloadPipelineArtifact@2
-        displayName: Recover NuGet packages Artifact
-        inputs:
-          buildType: 'current'
-          artifactName: $(NuGetArtifactName)
-          targetPath: $(System.DefaultWorkingDirectory)
-
-      - task: NuGetCommand@2
-        displayName: Publish NuGet packages to www.nuget.org
-        inputs:
-          command: 'push'
-          packagesToPush: $(package)
-          nuGetFeedType: 'external'
-          publishFeedCredentials: 'NugetOrg_asIsogeo'
