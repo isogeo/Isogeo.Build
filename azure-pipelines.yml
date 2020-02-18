@@ -1,0 +1,71 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+# CONDITIONS WHICH TRIGGER OR NOT THE JOBS
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  tags:
+    include:
+    - "*"
+
+pr:
+- master
+
+### GLOBAL VARIABLES ###
+
+variables:
+
+  ## ARTIFACTS CONFIGURATION ##
+  nuGetsArtifactName: 'Isogeo.BuildNuGets'
+  buildArtifactName : 'Isogeo.BuildBuild'
+
+  ## GENERAL CONFIGURATION ##
+  solution: 'Isogeo.Build.Tests.sln'
+  vmImage: 'windows-2019'
+  artifactDirLocation: $(System.DefaultWorkingDirectory)
+
+  ## NUGET PUBLICATION ##
+  nuGetPackagePatternToPublish: $(artifactPath)/**/*.nupkg
+  nuGetSource: https://api.nuget.org/v3/index.json
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: isogeo/devops-templates
+      ref: refs/tags/v1.2.1
+      endpoint: isogeo
+
+stages:
+
+# See templates/wiki for more details about parameters (isogeo/devops-templates repository)
+# Mandatory : solution
+- template: Net/Pipeline/NuGetsPipelineWithoutPublish.yml@templates
+  parameters:
+    solution: $(solution)
+    nuGetsArtifactName: $(nuGetsArtifactName)
+    buildArtifactName : $(buildArtifactName)
+
+- stage: 'Publish'
+  jobs:
+  - job: 'PublishNuGets'
+    pool:
+      vmImage: $(vmImage)
+    variables:
+      artifactPath: $(artifactDirLocation)/$(nuGetsArtifactName)
+    steps:
+    - template: /Net/Utilities/DownloadNuGetsArtifact.yml@templates
+      parameters:
+        nugetVersion: 5.1.0
+        nuGetsArtifactName: $(nuGetsArtifactName)
+        artifactDirLocation: $(System.DefaultWorkingDirectory)
+    - script: nuget push $(nuGetPackagePatternToPublish) -Source $(nuGetSource) -ApiKey $(apikey) -SkipDuplicate -NoSymbols
+      displayName: 'Publish NuGet packages to www.nuget.org'
+
+
+
