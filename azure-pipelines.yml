@@ -38,7 +38,7 @@ resources:
     - repository: templates
       type: github
       name: isogeo/devops-templates
-      ref: refs/tags/v1.2.1
+      ref: refs/tags/v1.2.5
       endpoint: isogeo
 
 stages:
@@ -66,6 +66,3 @@ stages:
         artifactDirLocation: $(System.DefaultWorkingDirectory)
     - script: nuget push $(nuGetPackagePatternToPublish) -Source $(nuGetSource) -ApiKey $(apikey) -SkipDuplicate -NoSymbols
       displayName: 'Publish NuGet packages to www.nuget.org'
-
-
-
